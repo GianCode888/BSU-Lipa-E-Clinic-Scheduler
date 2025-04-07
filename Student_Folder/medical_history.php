@@ -12,9 +12,8 @@ $sql = "SELECT mh.medhistory_id, mh.log, mh.created_at, u.first_name, u.last_nam
         JOIN users u ON mh.doctor_id = u.user_id
         WHERE mh.student_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bindparam(1, $student_id);
+$stmt->bindParam(1, $student_id);
 $stmt->execute();
-   
 ?>
 
 <!DOCTYPE html>
@@ -37,7 +36,7 @@ $stmt->execute();
     </tr>
 
     <?php
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $created_at = date('Y-m-d H:i:s', strtotime($row['created_at']));
         echo "<tr>
             <td>{$created_at}</td>
@@ -50,6 +49,3 @@ $stmt->execute();
 
 </body>
 </html>
-
-<?php
-?>
