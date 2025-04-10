@@ -21,11 +21,11 @@
     <h1>Welcome to the Student Dashboard</h1>
     <nav>
         <ul>
-            <li><a href="Student_Folder/view_appointment.php">View Appointments</a></li>
+            <li><a href="Student_Folder/view_appointment.html">View Appointments</a></li>
             <li><a href="Student_Folder/appointment_req.html">Request an Appointment</a></li>
             <li><a href="Student_Folder/medical_history.php">View Medical History</a></li>
             <li><a href="Student_Folder/view_availability.html">View Available Doctors</a></li>
-            <li><a href="Student_Folder/view_appointment.php">Check Appointment Status</a></li>
+            <li><a href="Student_Folder/appointment_status.php">Check Appointment Status</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </nav>
