@@ -6,14 +6,11 @@
     <title>Student Medication Request</title>
 </head>
 <body>
-    
-    <form method="POST" action="medication_request.php">
+    <form method="POST" action="student_crud.php">
+        <input type="hidden" name="request_type" value="medication">
         <label>Medication Request:</label>
         <textarea name="medication" id="medication" required></textarea>
-      
         <button type="submit">Submit Request</button>
-      </form>
-      
-
+    </form>
 </body>
 </html>
