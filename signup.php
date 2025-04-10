@@ -1,6 +1,8 @@
 <?php
 include('eclinic_database.php');
 
+$error_message = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $first_name = htmlspecialchars($_POST['first_name']);
     $last_name = htmlspecialchars($_POST['last_name']);
@@ -9,7 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = htmlspecialchars($_POST['role']);
 
-    // Create a new instance of DatabaseConnection
     $database = new DatabaseConnection();
     $conn = $database->getConnect();
 
@@ -23,12 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($existingUser) {
         if ($existingUser['email'] == $email) {
-            echo "The email address is already in use.";
+            $error_message = "The email address is already in use.";
         } elseif ($existingUser['username'] == $username) {
-            echo "The username is already in use.";
+            $error_message = "The username is already in use.";
         }
     } else {
-        // Proceed to insert the user into the database
         $query = "INSERT INTO users (first_name, last_name, email, username, password, role) 
                   VALUES (:first_name, :last_name, :email, :username, :password, :role)";
         $stmt = $conn->prepare($query);
@@ -41,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':role', $role);
 
         if ($stmt->execute()) {
-            header("Location: login.php"); // Redirect to login page after successful signup
+            header("Location: login.php"); 
             exit();
         } else {
-            echo "Error occurred while signing up.";
+            $error_message = "Error occurred while signing up.";
         }
     }
 }
@@ -66,27 +66,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     <div class="form-container">
         <form method="POST" action="signup.php">
+
+            <?php if (!empty($error_message)): ?>
+                <div class="error-message"><?php echo $error_message; ?></div>
+            <?php endif; ?>
+
             <label for="first_name">First Name:</label>
-            <input type="text" name="first_name" required>
+            <input type="text" name="first_name" value="<?php echo isset($first_name) ? htmlspecialchars($first_name) : ''; ?>" required>
 
             <label for="last_name">Last Name:</label>
-            <input type="text" name="last_name" required>
+            <input type="text" name="last_name" value="<?php echo isset($last_name) ? htmlspecialchars($last_name) : ''; ?>" required>
 
             <label for="email">Email:</label>
-            <input type="email" name="email" required>
+            <input type="email" name="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
 
             <label for="username">Username:</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" required>
 
             <label for="password">Password:</label>
             <input type="password" name="password" required>
 
             <label for="role">Role:</label>
             <select name="role" required>
-                <option value="" disabled selected>Select role</option>
-                <option value="student">Student</option>
-                <option value="doctor">Doctor</option>
-                <option value="nurse">Nurse</option>
+                <option value="" disabled <?php echo !isset($role) ? 'selected' : ''; ?>>Select role</option>
+                <option value="student" <?php echo (isset($role) && $role == 'student') ? 'selected' : ''; ?>>Student</option>
+                <option value="doctor" <?php echo (isset($role) && $role == 'doctor') ? 'selected' : ''; ?>>Doctor</option>
+                <option value="nurse" <?php echo (isset($role) && $role == 'nurse') ? 'selected' : ''; ?>>Nurse</option>
             </select>
 
             <button type="submit" name="submit">Signup</button>
@@ -99,7 +104,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
-
-
-
-

@@ -2,7 +2,7 @@
 include('eclinic_database.php');
 session_start();
 
-if (isset($_POST['login'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = htmlspecialchars($_POST['username']);  
     $password = htmlspecialchars($_POST['password']);
 
@@ -10,12 +10,10 @@ if (isset($_POST['login'])) {
         $_SESSION['user_id'] = 'admin'; 
         $_SESSION['role'] = 'admin';  
         
-        // Redirect to the admin dashboard
         header("Location: admin_dashboard.php");
         exit();
     }
 
-    // Create a new instance of DatabaseConnection
     $database = new DatabaseConnection();
     $conn = $database->getConnect();
 
@@ -27,28 +25,22 @@ if (isset($_POST['login'])) {
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user) {
-        // Verify the password with the hash stored in the database
-        if (password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['role'] = $user['role'];
-            
-            // Redirect based on role
-            if ($user['role'] == 'doctor') {
-                header("Location: doctor_dashboard.php");
-            } elseif ($user['role'] == 'nurse') {
-                header("Location: nurse_dashboard.php");
-            } elseif ($user['role'] == 'student') {
-                header("Location: student_dashboard.php");
-            }
-            exit();
-        } else {
-            echo "Invalid username or password!";
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['role'] = $user['role'];
+    
+        if ($user['role'] == 'doctor') {
+            header("Location: doctor_dashboard.php");
+        } elseif ($user['role'] == 'nurse') {
+            header("Location: nurse_dashboard.php");
+        } elseif ($user['role'] == 'student') {
+            header("Location: student_dashboard.php");
         }
+        exit();
     } else {
-        echo "Invalid username or password!";
-    }
-}
+        $error_message = "Invalid username or password!";
+    }  
+}  
 ?>
 
 <!DOCTYPE html>
@@ -68,6 +60,10 @@ if (isset($_POST['login'])) {
 
     <div class="form-container">
         <form method="POST" action="login.php">
+            <?php if (!empty($error_message)): ?>
+            <div class="error-message"><?php echo $error_message; ?></div>
+            <?php endif; ?>
+
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
 
@@ -85,4 +81,3 @@ if (isset($_POST['login'])) {
 
 </body>
 </html>
-

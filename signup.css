@@ -19,8 +19,8 @@ header {
     color: #333;
     width: 100%;
     box-sizing: border-box;
-    margin-top: 150px;
-    margin-bottom: 10px; /* Space between header and form */
+    margin-top: 200px;
+    margin-bottom: 10px; 
 }
 
 header h1 {
@@ -34,11 +34,10 @@ header p {
     margin-top: 10px;
 }
 
-/* Adjust the form-container positioning */
 .form-container {
     width: 50%;
     padding: 40px;
-    margin-top: 10px; /* Adds space between header and form */
+    margin-top: 10px; 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -103,13 +102,11 @@ form button:hover {
     text-decoration: underline;
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    background-color: #333;
-    color: white;
+.error-message {
+    color: #d8000c;
+    background-color: #ffd2d2;
     padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #d8000c;
+    border-radius: 5px;
 }

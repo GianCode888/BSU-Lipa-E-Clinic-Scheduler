@@ -14,12 +14,12 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Center header content */
+    align-items: center; 
     padding: 20px;
-    color: #333; /* Text color */
+    color: #333;
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: 500px; /* Add some space between the header and the form */
+    margin-bottom: 500px; 
 }
 
 header h1 {
@@ -33,23 +33,22 @@ header p {
     margin-top: 10px;
 }
 
-/* Overlay Form */
 .form-container {
-    width: 30%; /* Width of the form */
+    width: 30%; 
     padding: 40px;
     margin-top: 40px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align form elements at the top */
+    justify-content: flex-start; 
     background-color: white;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     box-sizing: border-box;
-    position: absolute; /* Position the form absolutely */
-    top: 50%; /* Vertically center the form */
-    left: 50%; /* Horizontally center the form */
-    transform: translate(-50%, -50%); /* Adjust for exact centering */
-    z-index: 10; /* Make sure the form stays above other content */
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: 10; 
 }
 
 form {
@@ -106,13 +105,13 @@ form button:hover {
     text-decoration: underline;
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    background-color: #333;
-    color: white;
+.error-message {
+    color: red;
+    background-color: #ffe6e6;
+    border: 1px solid red;
     padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
 }
+
