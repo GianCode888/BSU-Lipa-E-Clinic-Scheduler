@@ -13,8 +13,22 @@ $approvedMeds = $conn->query("SELECT COUNT(*) AS total FROM medication_requests 
 // Count of logs entered by this nurse (nurse uses doctor_id field)
 $logsHandled = $conn->query("SELECT COUNT(*) AS total FROM medical_history WHERE doctor_id=$nurse_id")->fetch_assoc()['total'];
 
-// Nurse details (sample, you can use session)
-$nurseData = $conn->query("SELECT * FROM users WHERE user_id=$nurse_id")->fetch_assoc();
+// Nurse details using prepared statement (secure)
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
+$stmt->bind_param("i", $nurse_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result && $result->num_rows > 0) {
+    $nurseData = $result->fetch_assoc();
+} else {
+    $nurseData = [
+        'first_name' => 'Unknown',
+        'last_name' => 'User',
+        'email' => 'Not Available'
+    ];
+}
+
 ?>
 
 <h2>Nurse Dashboard</h2>
