@@ -29,18 +29,22 @@ class Student {
         $stmt->bindParam(5, $reason);
 
         if ($stmt->execute()) {
-            echo "Appointment request submitted!";
+            header("Location: ../student_dashboard.php"); 
+            exit();
         } else {
-            echo "Error: " . $this->conn->errorInfo()[2];
+            return "Error: " . implode(" | ", $stmt->errorInfo());
         }
     }
 
-
+    public function delete_appointment($appointment_id) {
+        $sql = "DELETE FROM appointments WHERE appointment_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$appointment_id]);
+    }
 
     public function medical_request($student_id, $request_details) {
         $sql = "INSERT INTO " . $this->medication_requests_table . " (student_id, medication) 
                 VALUES (?, ?)";
-
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(1, $student_id);
         $stmt->bindParam(2, $request_details);
@@ -56,16 +60,24 @@ class Student {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $student = new Student($conn);
 
-    if (isset($_POST['request_type']) && $_POST['request_type'] === 'appointment') {
-        $appointment_date = $_POST['date']; 
-        $appointment_time = $_POST['time']; 
-        $reason = $_POST['reason'];
-        $student->request_appointment($student_id, $appointment_date, $appointment_time, $reason);
-    }
-
-    elseif (isset($_POST['request_type']) && $_POST['request_type'] === 'medication') {
-        $request_details = $_POST['medication'];
-        $student->medical_request($student_id, $request_details);
+    if (isset($_POST['request_type'])) {
+        if ($_POST['request_type'] === 'appointment') {
+            if (isset($_POST['appointment_date'], $_POST['appointment_time'], $_POST['reason'])) {
+                $appointment_date = $_POST['appointment_date']; 
+                $appointment_time = $_POST['appointment_time']; 
+                $reason = $_POST['reason'];
+                $student->request_appointment($student_id, $appointment_date, $appointment_time, $reason);
+            }
+        } elseif ($_POST['request_type'] === 'medication') {
+            if (isset($_POST['medication'])) {
+                $request_details = $_POST['medication'];
+                $student->medical_request($student_id, $request_details);
+            }
+        }
+    } elseif (isset($_POST['delete'])) {
+        if (isset($_POST['appointment_id'])) {
+            $student->delete_appointment($_POST['appointment_id']);
+        }
     }
 }
 ?>

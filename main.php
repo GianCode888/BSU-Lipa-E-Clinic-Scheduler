@@ -11,5 +11,8 @@
 </head>
 <body>
     
+<a href="login.php">Log In</a><br>
+<a href="signup.php">Sign up</a>
+
 </body>
 </html>
