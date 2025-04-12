@@ -8,11 +8,12 @@
 <body>
     <form method="POST" action="student_crud.php">
         <input type="hidden" name="request_type" value="appointment">
+        
         <label>Date:</label>
-        <input type="date" id="date" name="date" required>
+        <input type="date" id="appointment_date" name="appointment_date" required>
         
         <label>Time:</label>
-        <input type="time" id="time" name="time" required>
+        <input type="time" id="appointment_time" name="appointment_time" required>
         
         <label>Reason:</label>
         <textarea name="reason" id="reason" required></textarea>

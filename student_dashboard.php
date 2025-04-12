@@ -23,7 +23,8 @@ if (!isset($_SESSION['user_id']) || $user_role != 'student') {
         <ul>
         <li><a href="Student_Folder/appointment_req.html">Request an Appointment</a></li>
         <li><a href="Student_Folder/medication_request.html">Request Medication</a></li>
-            <li><a href="Student_Folder/view_appointment.php">View Appointments</a></li>
+            <li><a href="Student_Folder/view_appointment.php">View Appointment Request</a></li>
+            <li><a href="Student_Folder/view_medication.php">View Medication Request</a></li>
             <li><a href="Student_Folder/medical_history.php">View Medical History</a></li>
             <li><a href="Student_Folder/view_availability.html">View Available Doctors</a></li>
             <li><a href="Student_Folder/appointment_status.php">Check Appointment Status</a></li>

@@ -17,20 +17,36 @@ class Student {
     }
 
     public function request_appointment($student_id, $appointment_date, $appointment_time, $reason) {
-        $sql = "INSERT INTO " . $this->appointments_table . " (student_id, appointment_date, appointment_time, status, reason, created_at) 
+        $sql = "INSERT INTO " . $this->appointments_table . " 
+                (student_id, appointment_date, appointment_time, status, reason, created_at) 
                 VALUES (?, ?, ?, ?, ?, NOW())";
-        
+    
         $stmt = $this->conn->prepare($sql);
+    
+        $status = 'pending';
         $stmt->bindParam(1, $student_id);
         $stmt->bindParam(2, $appointment_date);
         $stmt->bindParam(3, $appointment_time);
-        $status = 'Pending';
-        $stmt->bindParam(4, $status);
+        $stmt->bindValue(4, $status); 
         $stmt->bindParam(5, $reason);
+    
+        if ($stmt->execute()) {
+            header ("Location: ../student_dashboard.php");
+        } else {
+            return "Error: " . implode(" | ", $stmt->errorInfo());
+        }
+    }
+    
+
+    public function medical_request($student_id, $request_details) {
+        $sql = "INSERT INTO " . $this->medication_requests_table . " (student_id, medication) 
+                VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(1, $student_id);
+        $stmt->bindParam(2, $request_details);
 
         if ($stmt->execute()) {
-            header("Location: ../student_dashboard.php"); 
-            exit();
+            header ("Location: ../student_dashboard.php");
         } else {
             return "Error: " . implode(" | ", $stmt->errorInfo());
         }
@@ -42,19 +58,6 @@ class Student {
         return $stmt->execute([$appointment_id]);
     }
 
-    public function medical_request($student_id, $request_details) {
-        $sql = "INSERT INTO " . $this->medication_requests_table . " (student_id, medication) 
-                VALUES (?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(1, $student_id);
-        $stmt->bindParam(2, $request_details);
-
-        if ($stmt->execute()) {
-            echo "Medication request submitted successfully.";
-        } else {
-            echo "Error: " . $this->conn->errorInfo()[2];
-        }
-    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -66,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $appointment_date = $_POST['appointment_date']; 
                 $appointment_time = $_POST['appointment_time']; 
                 $reason = $_POST['reason'];
-                $student->request_appointment($student_id, $appointment_date, $appointment_time, $reason);
+                echo $student->request_appointment($student_id, $appointment_date, $appointment_time, $reason);
             }
         } elseif ($_POST['request_type'] === 'medication') {
             if (isset($_POST['medication'])) {
