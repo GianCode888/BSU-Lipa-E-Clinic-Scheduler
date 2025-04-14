@@ -23,6 +23,7 @@ echo "<thead>
             <th>Medication</th>
             <th>Request Date</th>
             <th>Status</th>
+            <th>Action</th>
         </tr>
       </thead>";
 echo "<tbody>";
@@ -32,6 +33,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             <td>{$row['medication']}</td>
             <td>{$row['request_date']}</td>
             <td>{$row['status']}</td>
+            <td>
+                <form method='post' action='student_crud.php' style='display:inline-block;' >
+                    <input type='hidden' name='request_id' value='{$row['request_id']}'>
+                    <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this medication request?\")'>Delete</button>
+                </form>
+            </td>
           </tr>";
 }
 

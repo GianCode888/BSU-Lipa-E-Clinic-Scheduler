@@ -8,7 +8,7 @@ $conn = $database->getConnect();
 $student_id = $_SESSION['user_id'];
 $sql = "SELECT mh.medhistory_id, mh.log, mh.created_at, u.first_name, u.last_name 
         FROM medical_history mh
-        JOIN users u ON mh.doctor_id = u.user_id
+        LEFT JOIN users u ON mh.doctor_id = u.user_id
         WHERE mh.student_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $student_id);
