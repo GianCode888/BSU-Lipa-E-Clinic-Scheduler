@@ -1,18 +1,14 @@
 <?php
-session_start();
 include '../eclinic_database.php';
+include '../Student_Folder/student_crud.php';
+
+$student_id = $_SESSION['student_id'] ?? null;
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
+$studentCrud = new Student($conn);
+$stmt = $studentCrud->view_medicalHistory($student_id);
 
-$student_id = $_SESSION['user_id'];
-$sql = "SELECT mh.medhistory_id, mh.log, mh.created_at, u.first_name, u.last_name 
-        FROM medical_history mh
-        LEFT JOIN users u ON mh.doctor_id = u.user_id
-        WHERE mh.student_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $student_id);
-$stmt->execute();
 ?>
 
 <!DOCTYPE html>
@@ -38,18 +34,19 @@ $stmt->execute();
         </tr>
     </thead>
     <tbody>
-
     <?php
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $created_at = date('Y-m-d H:i:s', strtotime($row['created_at']));
+        $doctor_name = htmlspecialchars($row['first_name'] . ' ' . $row['last_name']);
+        $log = nl2br(htmlspecialchars($row['log']));
+        
         echo "<tr>
             <td>{$created_at}</td>
-            <td>{$row['first_name']} {$row['last_name']}</td>
-            <td>{$row['log']}</td>
+            <td>{$doctor_name}</td>
+            <td>{$log}</td>
         </tr>";
     }
     ?>
-
     </tbody>
 </table>
 

@@ -17,22 +17,39 @@ class Student {
     public function request_appointment($student_id, $appointment_date, $appointment_time, $reason){
         $stmt = $this->conn->prepare("CALL RequestAppointment(:student_id, :appointment_date, :appointment_time, :reason)");
         $stmt->execute([':student_id'=>$student_id, ':appointment_date'=>$appointment_date, ':appointment_time'=>$appointment_time, ':reason'=>$reason]);
+        return $stmt;
     }
 
     public function request_medication($student_id, $medication){
         $stmt = $this->conn->prepare("CALL RequestMedication(:student_id, :medication)");
         $stmt->execute([':student_id'=>$student_id, 'medication'=>$medication]);
+        return $stmt;
     }
 
     public function delete_appointment($appointment_id) {
         $stmt = $this->conn->prepare("CALL DeleteAppointment(:appointmentID)");
         $stmt->execute(['appointmentID' => $appointment_id]);
+        return $stmt;
     }
 
     public function delete_medication($request_id) {
         $stmt = $this->conn->prepare("CALL DeleteMedication(:medicationID)");
         $stmt->execute(['medicationID' => $request_id]);
+        return $stmt;
     }
+
+    public function view_appointmentrequest($student_id) {
+        $stmt = $this->conn->prepare("CALL ViewStudentAppointments(:appointmentID)");
+        $stmt->execute([':appointmentID' => $student_id]);
+        return $stmt;
+    }
+
+    public function view_medicationrequest($student_id) {
+        $stmt = $this->conn->prepare("CALL ViewStudentMedication(:medicationID)");
+        $stmt->execute([':medicationID' => $student_id]);
+        return $stmt;
+    }
+    
     
 
     }
@@ -77,5 +94,5 @@ class Student {
             }
         } 
     }
-    
+ 
 ?>

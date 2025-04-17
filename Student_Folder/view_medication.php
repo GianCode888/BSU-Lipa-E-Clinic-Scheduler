@@ -1,52 +1,62 @@
 <?php
-session_start();
-include '../eclinic_database.php';
+require_once '../eclinic_database.php';
+require_once 'student_crud.php';
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
-
 $student_id = $_SESSION['user_id'];
+$student = new Student($conn);
+$appointments = $student->view_medicationrequest($student_id);
+?>
 
-$sql = "SELECT * FROM medication_requests WHERE student_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $student_id, PDO::PARAM_INT);
-$stmt->execute();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Medication Requests</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+</head>
+<body>
 
-echo "<h3>Your Medication Requests</h3>";
-echo '<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">';
-echo '<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>';
-echo '<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>';
+    <h3>Your Medication Requests</h3>
 
-echo "<table id='medicationTable' class='display'>";
-echo "<thead>
-        <tr>
-            <th>Medication</th>
-            <th>Request Date</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-      </thead>";
-echo "<tbody>";
+    <table id="medicationTable" class="display">
+        <thead>
+            <tr>
+                <th>Medication</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            while ($row = $appointments->fetch(PDO::FETCH_ASSOC)) {
+                echo "<tr>
+                        <td>" . htmlspecialchars($row['medication']) . "</td>
+                        <td>" . htmlspecialchars($row['request_date']) . "</td>
+                        <td>" . htmlspecialchars($row['status']) . "</td>
+                        <td>
+                            <form method='POST' action='student_crud.php' style='display:inline-block;'>
+                                <input type='hidden' name='request_id' value='" . $row['request_id'] . "'>
+                                <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this medication request?\")'>Delete</button>
+                            </form>
+                        </td>
+                    </tr>";
+            }
+            ?>
+        </tbody>
+    </table>
 
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    echo "<tr>
-            <td>{$row['medication']}</td>
-            <td>{$row['request_date']}</td>
-            <td>{$row['status']}</td>
-            <td>
-                <form method='post' action='student_crud.php' style='display:inline-block;' >
-                    <input type='hidden' name='request_id' value='{$row['request_id']}'>
-                    <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this medication request?\")'>Delete</button>
-                </form>
-            </td>
-          </tr>";
-}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
-echo "</tbody></table>";
-
-echo "<script>
+    <script>
         $(document).ready(function() {
             $('#medicationTable').DataTable(); 
         });
-      </script>";
-?>
+    </script>
+
+</body>
+</html>
