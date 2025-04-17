@@ -1,8 +1,6 @@
 <?php
 session_start();
-// Include required files
 include("eclinic_database.php");
-include("nurse_dashboard_crud.php");
 
 // Check if user is logged in and is a nurse
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'nurse') {
@@ -10,72 +8,71 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'nurse') {
     exit();
 }
 
-$nurse_id = $_SESSION['user_id'];
 $database = new DatabaseConnection();
-$nurseManager = new NurseManager($database->getConnect());
+$conn = $database->getConnect();
 
-// Get nurse information
-$nurse = $nurseManager->getNurseInfo($nurse_id);
-
-// Get dashboard data
-$pendingDispensing = $nurseManager->countPendingDispensing();
-$todayAppointments = $nurseManager->countTodayAppointments($nurse_id);
-$recentActivity = $nurseManager->getRecentActivity($nurse_id);
+// Get the nurse's information
+$query = "SELECT first_name, last_name FROM users WHERE user_id = :user_id";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':user_id', $_SESSION['user_id']); // Fix parameter name and use session variable
+$stmt->execute();
+$nurse = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="nurse_dashboard.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nurse Dashboard - eClinic</title>
-    <link rel="stylesheet" href="nurse_dashboard.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <h1>eClinic Scheduler</h1>
-        <p>Welcome, Nurse <?php echo htmlspecialchars($nurse['first_name'] . ' ' . $nurse['last_name']); ?></p>
+        <p>Welcome, Nurse <?php echo $nurse['first_name'] . ' ' . $nurse['last_name']; ?></p>
         <nav>
             <ul>
                 <li><a href="nurse_dashboard.php">Dashboard</a></li>
+                <li><a href="medication_requests.php">Medication Requests</a></li>
                 <li><a href="completed_medications.php">Completed Medications</a></li>
                 <li><a href="patient_logs.php">Patient Logs</a></li>
-                <li><a href="logout_confirm.php">Logout</a></li>
+                <li><a href="logout.php">Logout</a></li>
             </ul>
         </nav>
     </header>
     
     <main>
-        <!-- Display success/error messages if any -->
-        <?php if(isset($_SESSION['message'])): ?>
-            <div class="alert alert-success">
-                <?php 
-                    echo $_SESSION['message']; 
-                    unset($_SESSION['message']);
-                ?>
-            </div>
-        <?php endif; ?>
-        
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger">
-                <?php 
-                    echo $_SESSION['error']; 
-                    unset($_SESSION['error']);
-                ?>
-            </div>
-        <?php endif; ?>
-    
         <section class="dashboard-summary">
             <h2>Dashboard Summary</h2>
             <div class="dashboard-cards">
                 <div class="card">
                     <h3>Pending Dispensing</h3>
+                    <?php
+                    // Count medication requests pending dispensing
+                    $query = "SELECT COUNT(*) FROM medication_requests WHERE status = 'approved'";
+                    $stmt = $conn->query($query);
+                    $pendingDispensing = $stmt->fetchColumn();
+                    ?>
                     <p class="count"><?php echo $pendingDispensing; ?></p>
                     <a href="medication_requests.php" class="btn">View Requests</a>
                 </div>
                 
                 <div class="card">
                     <h3>Today's Appointments</h3>
+                    <?php
+                    // Count today's appointments for this nurse
+                    $today = date('Y-m-d');
+                    $query = "SELECT COUNT(*) FROM appointments 
+                              WHERE nurse_id = :nurse_id AND 
+                              DATE(appointment_date) = :today";
+                    $stmt = $conn->prepare($query);
+                    $stmt->bindParam(':nurse_id', $_SESSION['user_id']);
+                    $stmt->bindParam(':today', $today);
+                    $stmt->execute();
+                    $todayAppointments = $stmt->fetchColumn();
+                    ?>
                     <p class="count"><?php echo $todayAppointments; ?></p>
                     <a href="appointments.php" class="btn">View Appointments</a>
                 </div>
@@ -91,38 +88,35 @@ $recentActivity = $nurseManager->getRecentActivity($nurse_id);
                         <th>Reason</th>
                         <th>Status</th>
                         <th>Date</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (count($recentActivity) > 0): ?>
-                        <?php foreach ($recentActivity as $activity): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($activity['first_name'] . ' ' . $activity['last_name']); ?></td>
-                                <td><?php echo htmlspecialchars($activity['reason']); ?></td>
-                                <td><?php echo ucfirst(htmlspecialchars($activity['status'])); ?></td>
-                                <td><?php echo date('M d, Y H:i', strtotime($activity['appointment_date'])); ?></td>
-                                <td>
-                                    <?php if ($activity['status'] == 'pending'): ?>
-                                        <form method="POST" action="nurse_dashboard_process.php">
-                                            <input type="hidden" name="action" value="update_appointment">
-                                            <input type="hidden" name="appointment_id" value="<?php echo $activity['appointment_id']; ?>">
-                                            <select name="new_status">
-                                                <option value="approved">Approve</option>
-                                                <option value="rejected">Reject</option>
-                                            </select>
-                                            <button type="submit">Update</button>
-                                        </form>
-                                    <?php endif; ?>
-                                    <a href="view_appointment.php?id=<?php echo $activity['appointment_id']; ?>" class="btn-small">View</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5">No recent appointments found</td>
-                        </tr>
-                    <?php endif; ?>
+                    <?php
+                    // Get recent appointments for this nurse
+                    $query = "SELECT a.appointment_id, a.reason, a.status, a.appointment_date, 
+                              u.first_name, u.last_name 
+                              FROM appointments a
+                              JOIN users u ON a.student_id = u.user_id
+                              WHERE a.nurse_id = :nurse_id
+                              ORDER BY a.appointment_date DESC LIMIT 10";
+                    $stmt = $conn->prepare($query);
+                    $stmt->bindParam(':nurse_id', $_SESSION['user_id']);
+                    $stmt->execute();
+                    $recentActivity = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    if (count($recentActivity) > 0) {
+                        foreach ($recentActivity as $activity) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($activity['first_name']) . " " . htmlspecialchars($activity['last_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($activity['reason']) . "</td>";
+                            echo "<td>" . ucfirst(htmlspecialchars($activity['status'])) . "</td>";
+                            echo "<td>" . date('M d, Y H:i', strtotime($activity['appointment_date'])) . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='4'>No recent appointments found</td></tr>";
+                    }
+                    ?>
                 </tbody>
             </table>
         </section>
