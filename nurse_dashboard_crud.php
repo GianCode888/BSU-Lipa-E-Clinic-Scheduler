@@ -57,15 +57,9 @@ class NurseManager {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    // Get details for a specific medication request without using a stored procedure
+    // Added missing function
     public function getMedicationRequestDetails($request_id) {
-        $query = "SELECT mr.*, s.student_id, s.first_name, s.last_name, m.medication_name, m.dosage 
-                 FROM medication_requests mr
-                 JOIN students s ON mr.student_id = s.student_id 
-                 JOIN medications m ON mr.medication_id = m.medication_id
-                 WHERE mr.request_id = ?";
-        
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare("CALL GetMedicationRequestDetails(?)");
         $stmt->execute([$request_id]);
         
         return $stmt->fetch(PDO::FETCH_ASSOC);

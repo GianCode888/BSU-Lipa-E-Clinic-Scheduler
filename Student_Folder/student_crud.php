@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '.eclinic_database.php';
+include 'eclinic_database.php';
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
