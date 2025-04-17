@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Set Availability</title>
+</head>
+<body>
+    <h2>Set Availability</h2>
+    <form method="POST" action="set_availability.php">
+        <label>Day:</label>
+        <select name="day" required>
+            <option value="">Select Day</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+        </select><br><br>
+
+        <label>Start Time:</label>
+        <input type="time" name="start_time" required><br><br>
+
+        <label>End Time:</label>
+        <input type="time" name="end_time" required><br><br>
+
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
