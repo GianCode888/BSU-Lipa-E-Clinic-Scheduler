@@ -60,7 +60,13 @@ class Student {
         $stmt = $this->conn->prepare("CALL ViewAvailableDoctor(:available_day)");
         $stmt->execute([':available_day' => $available_day]);
         return $stmt;
-    }    
+    }
+    
+    public function view_appointmentStatus($student_id) {
+        $stmt = $this->conn->prepare("CALL ViewAppointmentStatus(:student_id)");
+        $stmt->execute([':student_id' => $student_id]);
+        return $stmt;
+    }
     
 
     }
