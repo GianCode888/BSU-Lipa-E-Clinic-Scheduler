@@ -8,7 +8,6 @@ $database = new DatabaseConnection();
 $conn = $database->getConnect();
 $studentCrud = new Student($conn);
 $stmt = $studentCrud->view_medicalHistory($student_id);
-
 ?>
 
 <!DOCTYPE html>
@@ -29,20 +28,24 @@ $stmt = $studentCrud->view_medicalHistory($student_id);
     <thead>
         <tr>
             <th>Date</th>
-            <th>Doctor Name</th>
+            <th>Handled By</th>
+            <th>Role</th>
             <th>Log</th>
         </tr>
     </thead>
     <tbody>
     <?php
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        
         $created_at = date('Y-m-d H:i:s', strtotime($row['created_at']));
-        $doctor_name = htmlspecialchars($row['first_name'] . ' ' . $row['last_name']);
+        $handled_by = htmlspecialchars(trim($row['first_name'] . ' ' . $row['last_name']));
+        $role = htmlspecialchars($row['created_by_role']);
         $log = nl2br(htmlspecialchars($row['log']));
         
         echo "<tr>
             <td>{$created_at}</td>
-            <td>{$doctor_name}</td>
+            <td>{$handled_by}</td>
+            <td>{$role}</td>
             <td>{$log}</td>
         </tr>";
     }

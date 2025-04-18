@@ -49,7 +49,18 @@ class Student {
         $stmt->execute([':medicationID' => $student_id]);
         return $stmt;
     }
-    
+
+    public function view_medicalHistory($student_id) {
+        $stmt = $this->conn->prepare("CALL ViewStudentMedHistory(:student_id)");
+        $stmt->execute([':student_id' => $student_id]);
+        return $stmt;
+    }    
+
+    public function view_availableDoctor($available_day) {
+        $stmt = $this->conn->prepare("CALL ViewAvailableDoctor(:available_day)");
+        $stmt->execute([':available_day' => $available_day]);
+        return $stmt;
+    }    
     
 
     }

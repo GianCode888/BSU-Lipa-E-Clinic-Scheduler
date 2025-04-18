@@ -14,60 +14,48 @@ $appointments = $student->view_appointmentrequest($student_id);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Appointments</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Your Appointments</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>Your Appointments</h1>
+    <h3>Your Appointments</h3>
 
-        <?php if ($appointments->rowCount() > 0): ?>
-            <table id="appointmentsTable">
-                <thead>
-                    <tr>
-                        <th>Appointment ID</th>
-                        <th>Appointment Date</th>
-                        <th>Appointment Time</th>
-                        <th>Reason</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($row = $appointments->fetch(PDO::FETCH_ASSOC)): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['appointment_id']); ?></td>
-                            <td><?php echo htmlspecialchars($row['appointment_date']); ?></td>
-                            <td><?php echo htmlspecialchars($row['appointment_time']); ?></td>
-                            <td><?php echo htmlspecialchars($row['reason']); ?></td>
-                            <td>
-                                <form method="POST" action="view_appointment.php">
-                                    <input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id']; ?>">
-                                    <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this appointment?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>No appointments found.</p>
-        <?php endif; ?>
-    </div>
+    <table id="appointmentsTable" class="display">
+        <thead>
+            <tr>
+                <th>Appointment Date</th>
+                <th>Appointment Time</th>
+                <th>Reason</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            while ($row = $appointments->fetch(PDO::FETCH_ASSOC)) {
+                echo "<tr>
+                        <td>" . htmlspecialchars($row['appointment_date']) . "</td>
+                        <td>" . htmlspecialchars($row['appointment_time']) . "</td>
+                        <td>" . htmlspecialchars($row['reason']) . "</td>
+                        <td>
+                            <form method='POST' action='student_crud.php' style='display:inline-block;'>
+                                <input type='hidden' name='appointment_id' value='" . $row['appointment_id'] . "'>
+                                <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this appointment?\")'>Delete</button>
+                            </form>
+                        </td>
+                    </tr>";
+            }
+            ?>
+        </tbody>
+    </table>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            $('#appointmentsTable').DataTable();
+            $('#appointmentsTable').DataTable(); 
         });
-
-        function toggleForm() {
-            const form = document.getElementById('formId');
-            form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
-        }
     </script>
 
 </body>
