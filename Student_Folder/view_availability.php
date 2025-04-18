@@ -10,7 +10,7 @@ if (isset($_GET['available_day']) && $_GET['available_day'] !== '') {
     $available_day = $_GET['available_day'];
     $stmt = $studentCrud->view_availableDoctor($available_day);
 
-    echo "<h3>Available Doctors/Nurses on {$available_day}</h3>";
+    echo "<h3>Available Doctors on {$available_day}</h3>";
 
     echo '<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">';
     echo '<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>';

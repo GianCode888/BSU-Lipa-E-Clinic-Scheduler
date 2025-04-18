@@ -21,7 +21,8 @@ echo "<table id='appointmentsTable' class='display'>
             <th>Time</th>
             <th>Status</th>
             <th>Reason</th>
-            <th>Doctor/Nurse</th>
+            <th>Name</th>
+            <th>Role</th>
             <th>Approval Notes</th>
         </tr>
     </thead>
@@ -31,7 +32,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $doctor = (!empty($row['doctor_first_name']) && !empty($row['doctor_last_name'])) ? $row['doctor_first_name'] . ' ' . $row['doctor_last_name'] : null;
     $nurse = (!empty($row['nurse_first_name']) && !empty($row['nurse_last_name'])) ? $row['nurse_first_name'] . ' ' . $row['nurse_last_name'] : null;
 
-    $doctor_or_nurse = $doctor ? "Doctor: {$doctor}" : ($nurse ? "Nurse: {$nurse}" : 'N/A');
+    if ($doctor) {
+        $name = $doctor;
+        $role = 'Doctor';
+    } elseif ($nurse) {
+        $name = $nurse;
+        $role = 'Nurse';
+    } else {
+        $name = 'N/A';
+        $role = 'N/A';
+    }
 
     $approval_notes = !empty($row['approval_notes']) ? htmlspecialchars($row['approval_notes']) : 'No notes';
 
@@ -40,7 +50,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <td>{$row['appointment_time']}</td>
         <td>{$row['status']}</td>
         <td>{$row['reason']}</td>
-        <td>{$doctor_or_nurse}</td>
+        <td>{$name}</td>
+        <td>{$role}</td>
         <td>{$approval_notes}</td>
     </tr>";
 }
