@@ -10,9 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $database = new DatabaseConnection();
     $conn = $database->getConnect();
-
-    $login = new Login($conn);
-    $user = $login->authenticate($username, $password);
+    $userClass = new User($conn);
+    $user = $userClass->authenticate($username, $password);
 
     if ($user) {
         session_start();
@@ -38,11 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/login.css">
     <title>Login - eClinic Scheduler</title>
+    <link rel="stylesheet" href="CSS/login.css">
 </head>
 <body>
+
     <header>
+        <img src=".//Images/Spartan.png" alt="eClinic Logo">
         <h1>eClinic Scheduler</h1>
         <p>Manage your appointments with ease.</p>
     </header>
@@ -62,10 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" name="login">Login</button>
 
             <div class="links">
-                <p>Don't have an account?</p>
-                <a href="signup.php" id="signUpLink">Sign up here!</a>
+                <p>Don't have an account? <a href="signup.php">Sign up here!</a></p>
             </div>
         </form>
     </div>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Spartan eClinic Scheduler
+    </footer>
+
 </body>
 </html>
+

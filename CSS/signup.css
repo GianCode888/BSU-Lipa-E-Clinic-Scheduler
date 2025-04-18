@@ -1,51 +1,53 @@
 body {
     font-family: Arial, sans-serif;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
     margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+.wrapper {
+    flex: 1;
+    display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding: 10px; /* Adding some padding for better fit */
 }
 
 header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    color: #333;
-    width: 100%;
-    box-sizing: border-box;
-    margin-top: 200px;
-    margin-bottom: 10px; 
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+header img {
+    max-width: 80px;
 }
 
 header h1 {
-    font-size: 60px;
-    margin: 0;
-    color: #7494ec;
+    font-size: 28px;
+    color: #e63946;
+    margin: 8px 0 4px;
 }
 
 header p {
-    font-size: 18px;
-    margin-top: 10px;
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 10px;
 }
 
 .form-container {
-    width: 50%;
-    padding: 40px;
-    margin-top: 10px; 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    background-color: white;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.85);
+    padding: 15px 20px;
     border-radius: 8px;
-    box-sizing: border-box;
-    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px; /* a bit narrower */
+    max-height: 400px; /* shorter form */
+    overflow-y: auto; /* Allow scrolling inside the form if needed */
+    margin: 0 auto;
 }
 
 form {
@@ -53,60 +55,72 @@ form {
     flex-direction: column;
 }
 
-form label {
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+input, select {
+    padding: 8px;
     margin-bottom: 10px;
-    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-form input, form select {
+button {
     padding: 10px;
-    margin-bottom: 15px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-form button {
-    padding: 12px;
-    background-color: #7494ec;
+    background-color: #e63946;
     color: white;
     border: none;
-    font-size: 16px;
-    border-radius: 5px;
+    border-radius: 4px;
+    font-size: 15px;
     cursor: pointer;
-    margin-bottom: 10px;
 }
 
-form button:hover {
-    background-color: #005bb5;
+button:hover {
+    background-color: #d62828;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 8px;
+    margin-bottom: 12px;
+    border-radius: 5px;
+    font-size: 13px;
 }
 
 .links {
-    margin-top: 15px;
+    margin-top: 8px;
     text-align: center;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
 }
 
 .links p {
-    margin: 0;
+    font-size: 13px;
 }
 
 .links a {
+    font-size: 14px;
+    color: #e63946;
     text-decoration: none;
-    color: #005bb5;
 }
 
 .links a:hover {
     text-decoration: underline;
 }
 
-.error-message {
-    color: #d8000c;
-    background-color: #ffd2d2;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #d8000c;
-    border-radius: 5px;
+footer {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 13px;
+    color: white;
+}
+
+footer p {
+    display: inline-block;
+    background: red;
+    padding: 4px 12px;
+    border-radius: 20px;
 }
