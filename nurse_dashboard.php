@@ -37,7 +37,8 @@ $nurse = $stmt->fetch(PDO::FETCH_ASSOC);
                 <li><a href="nurse_dashboard.php">Dashboard</a></li>
                 <li><a href="medication_requests.php">Medication Requests</a></li>
                 <li><a href="completed_medications.php">Completed Medications</a></li>
-                <li><a href="patient_logs.php">Patient Logs</a></li>
+                <li> <a href="patient_log.php">Patient Logs</a></li>
+
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </nav>
