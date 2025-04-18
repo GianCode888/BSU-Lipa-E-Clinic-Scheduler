@@ -1,35 +1,24 @@
 <?php
-session_start();
-include('eclinic_database.php');
+require_once 'eclinic_database.php';
+require_once 'user.php';
 
+$error_message = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = htmlspecialchars($_POST['username']);  
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
-
-    if ($username == 'admin' && $password == 'admin123') {
-        $_SESSION['user_id'] = 'admin'; 
-        $_SESSION['role'] = 'admin';  
-        
-        header("Location: admin_dashboard.php");
-        exit();
-    }
 
     $database = new DatabaseConnection();
     $conn = $database->getConnect();
 
-    // Check if user exists by username
-    $query = "SELECT * FROM users WHERE username = :username";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':username', $username);
-    $stmt->execute();
+    $login = new Login($conn);
+    $user = $login->authenticate($username, $password);
 
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user && password_verify($password, $user['password'])) {
+    if ($user) {
+        session_start();
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['role'] = $user['role'];
-    
+
         if ($user['role'] == 'doctor') {
             header("Location: doctor_dashboard.php");
         } elseif ($user['role'] == 'nurse') {
@@ -39,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         exit();
     } else {
-        $error_message = "Invalid username or password!";
-    }  
-}  
+        $error_message = "Invalid username or password.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,8 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/login.css">
-    <title>Login</title>
-
+    <title>Login - eClinic Scheduler</title>
 </head>
 <body>
     <header>
@@ -62,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form-container">
         <form method="POST" action="login.php">
             <?php if (!empty($error_message)): ?>
-            <div class="error-message"><?php echo $error_message; ?></div>
+                <div class="error-message"><?php echo $error_message; ?></div>
             <?php endif; ?>
 
             <label for="username">Username:</label>
@@ -74,11 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" name="login">Login</button>
 
             <div class="links">
-                <p>Don't Have An Account?</p>
-                <a href="signup.php" id="signUpLink">Sign Up</a>
+                <p>Don't have an account?</p>
+                <a href="signup.php" id="signUpLink">Sign up here!</a>
             </div>
         </form>
     </div>
-
 </body>
 </html>
