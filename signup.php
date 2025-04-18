@@ -1,7 +1,7 @@
 <?php
-include('eclinic_database.php');
-
-$error_message = "";
+session_start();
+require_once 'eclinic_database.php'; 
+require_once 'register.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $first_name = htmlspecialchars($_POST['first_name']);
@@ -11,37 +11,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = htmlspecialchars($_POST['role']);
 
-    $database = new DatabaseConnection();
-    $conn = $database->getConnect();
+    $databaseConnection = new DatabaseConnection();
+    $conn = $databaseConnection->getConnect(); 
 
-    // Check if email or username already exists
-    $query = "SELECT * FROM users WHERE email = :email OR username = :username";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':username', $username);
-    $stmt->execute();
-    $existingUser = $stmt->fetch(PDO::FETCH_ASSOC);
+    $database = new Register($conn);
+
+    $existingUser = $database->isDuplicate($email, $username);
 
     if ($existingUser) {
-        if ($existingUser['email'] == $email) {
-            $error_message = "The email address is already in use.";
-        } elseif ($existingUser['username'] == $username) {
-            $error_message = "The username is already in use.";
-        }
+        $error_message = "The email or username is already in use.";
     } else {
-        $query = "INSERT INTO users (first_name, last_name, email, username, password, role) 
-                  VALUES (:first_name, :last_name, :email, :username, :password, :role)";
-        $stmt = $conn->prepare($query);
-
-        $stmt->bindParam(':first_name', $first_name);
-        $stmt->bindParam(':last_name', $last_name);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':role', $role);
-
-        if ($stmt->execute()) {
-            header("Location: login.php"); 
+        if ($database->create($first_name, $last_name, $email, $username, $password, $role)) {
+            header("Location: login.php");
             exit();
         } else {
             $error_message = "Error occurred while signing up.";
@@ -55,15 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="CSS/signup.css"> 
+    <title>Sign up - eClinic Scheduler</title>
+    <link rel="stylesheet" href="CSS/signup.css">
 </head>
 <body>
     <header>
         <h1>eClinic Scheduler</h1>
         <p>Manage your appointments with ease.</p>
     </header>
-    
+
     <div class="form-container">
         <form method="POST" action="signup.php">
 
@@ -98,9 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div class="links">
-            <p>Already have an account?</p><a href="login.php">Login</a>
+            <p>Already have an account?</p><a href="login.php">Log in now!</a>
         </div>
     </div>
-
 </body>
 </html>
