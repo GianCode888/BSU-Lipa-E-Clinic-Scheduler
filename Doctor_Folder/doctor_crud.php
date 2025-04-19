@@ -10,7 +10,6 @@ $database = new DatabaseConnection();
 $conn = $database->getConnect();
 $doctor_id = $_SESSION['user_id'];
 
-
 class Doctor {
     private $conn;
 
@@ -24,29 +23,29 @@ class Doctor {
     }
 
     public function viewRequests($doctor_id) {
-        $stmt = $this->conn->prepare("SELECT * FROM appointments WHERE doctor_id = :doctor_id");
+        $stmt = $this->conn->prepare("CALL ViewAppointmentsByDoctor(:doctor_id)");
         $stmt->execute([':doctor_id' => $doctor_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor(); // Important after CALL
+        return $appointments;
     }
 
     public function viewMedicationRequests() {
-        // Optional: JOIN to include student name
-        $stmt = $this->conn->prepare("
-            SELECT mr.*, s.fullname AS student_name 
-            FROM medication_requests mr 
-            JOIN students s ON mr.student_id = s.student_id
-        ");
+        $stmt = $this->conn->prepare("CALL ViewMedicationRequests()");
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC); // ✅ Return as array
+        $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $requests;
     }
 
     public function approveAppointment($appointment_id, $status, $notes) {
-        $stmt = $this->conn->prepare("UPDATE appointments SET status = :status, notes = :notes WHERE appointment_id = :appointment_id");
+        $stmt = $this->conn->prepare("CALL UpdateAppointmentStatus(:appointment_id, :status, :notes)");
         $stmt->execute([
             ':appointment_id' => $appointment_id,
             ':status' => $status,
             ':notes' => $notes
         ]);
+        $stmt->closeCursor();
     }
 }
 
@@ -71,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ✅ Medication Request Update
+    // ✅ Medication Request Update (this part still using raw UPDATE query)
     if (isset($_POST['med_action'], $_POST['request_id'])) {
         $newStatus = ($_POST['med_action'] === 'approve') ? 'approved' : 'declined';
         try {
@@ -83,17 +82,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ✅ Appointment Quick Action
+    // ✅ Appointment Quick Action - duplicate (already handled above)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'approve_appointment') {
         $appt_id = $_POST['appointment_id'];
         $status = $_POST['status'];
         $notes = $_POST['notes'] ?? '';
-    
+
         try {
-            $update = "UPDATE appointments SET status = ?, notes = ? WHERE appointment_id = ?";
-            $stmt = $conn->prepare($update);
-            $stmt->execute([$status, $notes, $appt_id]);
-    
+            $stmt = $conn->prepare("CALL UpdateAppointmentStatus(:appt_id, :status, :notes)");
+            $stmt->execute([
+                ':appt_id' => $appt_id,
+                ':status' => $status,
+                ':notes' => $notes
+            ]);
+            $stmt->closeCursor();
+
             header("Location: appointment_requests.php?msg=Appointment+updated+successfully");
             exit();
         } catch (PDOException $e) {
@@ -101,3 +104,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+?>
