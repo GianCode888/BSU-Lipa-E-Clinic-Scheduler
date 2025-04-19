@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Medical Records</title>
+</head>
+<body>
+    <h2>Student Medical Records</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Student Name</th>
+            <th>Concern</th>
+            <th>Diagnosis</th>
+            <th>Date Recorded</th>
+        </tr>
+        <?php if (!empty($records)) : ?>
+            <?php foreach ($records as $rec): ?>
+                <tr>
+                    <td><?= htmlspecialchars($rec['student_name']) ?></td>
+                    <td><?= htmlspecialchars($rec['concern']) ?></td>
+                    <td><?= htmlspecialchars($rec['diagnosis']) ?></td>
+                    <td><?= htmlspecialchars($rec['date_recorded']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr><td colspan="4">No records found.</td></tr>
+        <?php endif; ?>
+    </table>
+</body>
+</html>
