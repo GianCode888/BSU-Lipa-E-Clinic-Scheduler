@@ -1,7 +1,6 @@
 <?php
-session_start();
 require_once '../eclinic_database.php';
-require_once 'user_details.php';
+require_once 'student_crud.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -10,10 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 
 $database = new DatabaseConnection();
 $db = $database->getConnect();
-
 $userId = $_SESSION['user_id'];
-$userDetails = new UserDetails($db);
-$userData = $userDetails->getUserDetails($userId);
+$userDetails = new Student($db);
+$stmt = $userDetails->getUserDetails($userId);
+$userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($userData) {
     echo "<h2>Good day, " . htmlspecialchars($userData['name']) . "!</h2>";

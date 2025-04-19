@@ -67,6 +67,12 @@ class Student {
         $stmt->execute([':student_id' => $student_id]);
         return $stmt;
     }
+
+    public function getUserDetails($userId) {
+        $stmt = $this->conn->prepare("CALL GetUserDetails(:uid)");
+        $stmt->execute([':uid' => $userId]);
+        return $stmt;
+    }
     
 
     }
