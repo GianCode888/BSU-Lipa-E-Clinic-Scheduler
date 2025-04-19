@@ -65,10 +65,10 @@ function showAppointments($appointments) {
 
         foreach ($appointments as $appt) {
             $status = htmlspecialchars($appt['status']);
-            $statusColor = match ($status) {
-                'approved' => 'green',
-                'declined' => 'red',
-                default => 'orange'
+            $statusClass = match ($status) {
+                'approved' => 'status-approved',
+                'declined' => 'status-declined',
+                default => 'status-pending'
             };
 
             echo "<tr>
@@ -77,7 +77,7 @@ function showAppointments($appointments) {
                     <td>" . htmlspecialchars($appt['nurse_id']) . "</td>
                     <td>" . htmlspecialchars($appt['doctor_id']) . "</td>
                     <td>" . htmlspecialchars($appt['appointment_date']) . "</td>
-                    <td style='color:$statusColor'>" . ucfirst($status) . "</td>
+                    <td class=\"$statusClass\">" . ucfirst($status) . "</td>
                     <td>" . htmlspecialchars($appt['reason']) . "</td>
                     <td>
                         <form method='post' style='display:inline'>
@@ -101,8 +101,8 @@ function showAppointments($appointments) {
 <head>
     <meta charset="UTF-8">
     <title>Doctor - Appointment Management</title>
+    <link rel="stylesheet" href="../CSS/doctor_dashboard.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    
 </head>
 <body>
 

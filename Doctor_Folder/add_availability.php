@@ -21,14 +21,14 @@ $end = $_POST['end_time'] ?? '';
 $doctorId = $_POST['doctor_id'] ?? '';
 
 if ($day && $start && $end && $doctorId) {
-    $query = "INSERT INTO availability (doctor_id, available_day, start_time, end_time) 
-              VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
+    $stmt = $conn->prepare("CALL AddDoctorAvailability(?, ?, ?, ?)");
     $stmt->execute([$doctorId, $day, $start, $end]);
+    $stmt->closeCursor();
 
     header('Location: view_availability.php'); 
     exit();
 } else {
     echo "All fields are required.";
 }
+
 ?>

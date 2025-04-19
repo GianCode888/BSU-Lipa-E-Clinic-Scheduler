@@ -5,14 +5,11 @@ function showScheduleForm($conn) {
     echo "<div id='schedule' class='section'>
             <h2>🕒 Doctor's Weekly Availability</h2>";
 
-    // Fetch availability from DB
-    $query = "SELECT available_day, start_time, end_time 
-              FROM availability 
-              WHERE doctor_id = ? 
-              ORDER BY FIELD(available_day, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'), start_time";
-    $stmt = $conn->prepare($query);
+    // Use stored procedure
+    $stmt = $conn->prepare("CALL GetDoctorAvailability(?)");
     $stmt->execute([$doctorId]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
 
     $availability = [];
     foreach ($results as $row) {
@@ -49,3 +46,4 @@ function showScheduleForm($conn) {
           </form>
         </div>';
 }
+?>
