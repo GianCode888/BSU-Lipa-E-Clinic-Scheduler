@@ -1,0 +1,122 @@
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background: #f0f2f5;
+        }
+
+        .nav {
+            background-color: #3498db;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .nav a:hover {
+            background-color: #2980b9;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .appt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .appt-table th, .appt-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .appt-table th {
+            background-color: #3498db;
+            color: white;
+            text-align: left;
+        }
+
+        .appt-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .appt-table tr:hover {
+            background-color: #eaf4ff;
+        }
+
+        .card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 10px;
+        }
+
+        .form-actions button {
+            padding: 8px 14px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+
+        button[name="med_action"][value="approve"],
+        button[name="appt_action"][value="approve"] {
+            background-color: #27ae60;
+        }
+
+        button[name="med_action"][value="decline"],
+        button[name="appt_action"][value="decline"] {
+            background-color: #e74c3c;
+        }
+  
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #ccc;
+            padding: 0.75em;
+            text-align: center;
+        }
+        .schedule-table th {
+            background-color: #f0f0f0;
+        }
+
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        
+        
