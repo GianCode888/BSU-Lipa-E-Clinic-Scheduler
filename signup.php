@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'eclinic_database.php'; 
-require_once 'register.php';
+require_once 'user.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $first_name = htmlspecialchars($_POST['first_name']);
@@ -14,14 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $databaseConnection = new DatabaseConnection();
     $conn = $databaseConnection->getConnect(); 
 
-    $database = new Register($conn);
+    $userClass = new User($conn);
 
-    $existingUser = $database->isDuplicate($email, $username);
+    $existingUser = $userClass->isDuplicate($email, $username);
 
     if ($existingUser) {
         $error_message = "The email or username is already in use.";
     } else {
-        if ($database->create($first_name, $last_name, $email, $username, $password, $role)) {
+        if ($userClass->create($first_name, $last_name, $email, $username, $password, $role)) {
             header("Location: login.php");
             exit();
         } else {
@@ -30,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,47 +39,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="CSS/signup.css">
 </head>
 <body>
-    <header>
-        <h1>eClinic Scheduler</h1>
-        <p>Manage your appointments with ease.</p>
-    </header>
 
-    <div class="form-container">
-        <form method="POST" action="signup.php">
+<div class="wrapper">
+    <div class="content">
+        <header>
+            <img src=".//Images/Spartan.png" alt="eClinic Logo" style="max-width: 120px;">
+            <h1>eClinic Scheduler</h1>
+            <p>Manage your appointments with ease.</p>
+        </header>
 
-            <?php if (!empty($error_message)): ?>
-                <div class="error-message"><?php echo $error_message; ?></div>
-            <?php endif; ?>
+        <div class="form-container">
+            <form method="POST" action="signup.php">
 
-            <label for="first_name">First Name:</label>
-            <input type="text" name="first_name" value="<?php echo isset($first_name) ? htmlspecialchars($first_name) : ''; ?>" required>
+                <?php if (!empty($error_message)): ?>
+                    <div class="error-message"><?php echo $error_message; ?></div>
+                <?php endif; ?>
 
-            <label for="last_name">Last Name:</label>
-            <input type="text" name="last_name" value="<?php echo isset($last_name) ? htmlspecialchars($last_name) : ''; ?>" required>
+                <label for="first_name">First Name:</label>
+                <input type="text" name="first_name" value="<?php echo isset($first_name) ? htmlspecialchars($first_name) : ''; ?>" required>
 
-            <label for="email">Email:</label>
-            <input type="email" name="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
+                <label for="last_name">Last Name:</label>
+                <input type="text" name="last_name" value="<?php echo isset($last_name) ? htmlspecialchars($last_name) : ''; ?>" required>
 
-            <label for="username">Username:</label>
-            <input type="text" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" required>
+                <label for="email">Email:</label>
+                <input type="email" name="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
 
-            <label for="password">Password:</label>
-            <input type="password" name="password" required>
+                <label for="username">Username:</label>
+                <input type="text" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" required>
 
-            <label for="role">Role:</label>
-            <select name="role" required>
-                <option value="" disabled <?php echo !isset($role) ? 'selected' : ''; ?>>Select role</option>
-                <option value="student" <?php echo (isset($role) && $role == 'student') ? 'selected' : ''; ?>>Student</option>
-                <option value="doctor" <?php echo (isset($role) && $role == 'doctor') ? 'selected' : ''; ?>>Doctor</option>
-                <option value="nurse" <?php echo (isset($role) && $role == 'nurse') ? 'selected' : ''; ?>>Nurse</option>
-            </select>
+                <label for="password">Password:</label>
+                <input type="password" name="password" required>
 
-            <button type="submit" name="submit">Signup</button>
-        </form>
+                <label for="role">Role:</label>
+                <select name="role" required>
+                    <option value="" disabled <?php echo !isset($role) ? 'selected' : ''; ?>>Select role</option>
+                    <option value="student" <?php echo (isset($role) && $role == 'student') ? 'selected' : ''; ?>>Student</option>
+                    <option value="doctor" <?php echo (isset($role) && $role == 'doctor') ? 'selected' : ''; ?>>Doctor</option>
+                    <option value="nurse" <?php echo (isset($role) && $role == 'nurse') ? 'selected' : ''; ?>>Nurse</option>
+                </select>
 
-        <div class="links">
-            <p>Already have an account?</p><a href="login.php">Log in now!</a>
+                <button type="submit" name="submit">Signup</button>
+            </form>
+
+            <div class="links">
+                <p>Already have an account?</p><a href="login.php">Log in now!</a>
+            </div>
         </div>
     </div>
+</div>
+
+<footer>
+    <p>&copy; <?php echo date("Y"); ?> Spartan eClinic Scheduler</p>
+</footer>
+
 </body>
 </html>

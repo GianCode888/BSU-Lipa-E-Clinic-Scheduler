@@ -10,7 +10,7 @@
 /* BODY */
 body {
     font-family: 'Poppins', 'Segoe UI', sans-serif;
-    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background: url('https://scontent.fmnl4-1.fna.fbcdn.net/v/t39.30808-6/476443494_937127451901590_7860286956603022676_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeG0BXpvLN67AyVD7ndB5L0o-tDxBr_wkon60PEGv_CSiZWhLAjfu88h3YbHFImIoc6SOnWtLzkKBvOMhbibgowU&_nc_ohc=kcjtW5sLw4oQ7kNvwFhwRxG&_nc_oc=AdmAiezH64hyDyZElUgljuz9irmxSqU_gNVGWbkDnRQUJDvSnHJfTXjEa1cr4LjYFZk&_nc_zt=23&_nc_ht=scontent.fmnl4-1.fna&_nc_gid=dFHUqAzeHOuUxRXqZNRNgA&oh=00_AfGH2fJ0PD9yRXO6qnhDWBJcrJnKoRVglRgPjEg2VEhnqQ&oe=6807FB9D') no-repeat center center fixed;
     background-size: cover;
     color: #2c2c2c;
     min-height: 100vh;
@@ -94,12 +94,22 @@ nav ul li a:hover {
 
 /* FOOTER */
 footer {
-    background-color: #f8f8f8;
+    background-color: rgba(139, 0, 0, 0.8); /* Deep Spartan Red similar to header */
+    color: #ffffff;
+    padding: 20px;
     text-align: center;
-    padding: 15px 0;
-    font-size: 0.95rem;
-    color: #555;
-    border-top: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 30px; /* Add some space between content and footer */
+    max-width: 600px; /* Restrict max width for better appearance */
+    margin-left: auto; /* Center it horizontally */
+    margin-right: auto; /* Center it horizontally */
+}
+
+footer p {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
 }
 
 /* MOBILE FRIENDLY */
