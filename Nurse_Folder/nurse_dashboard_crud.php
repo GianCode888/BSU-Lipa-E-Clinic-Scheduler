@@ -90,5 +90,31 @@ class NurseManager {
         
         return $stmt->execute([$student_id, $nurse_id, $log_details]);
     }
+
+
+
+public function dispenseMedication($request_id, $nurse_id, $notes = '') {
+    try {
+        // Call the stored procedure to dispense medication
+        $stmt = $this->conn->prepare("CALL DispenseMedication(?, ?, ?)");
+        
+        if (!$stmt) {
+            return "Failed to prepare statement: " . $this->conn->error;
+        }
+        
+        $result = $stmt->execute([$request_id, $nurse_id, $notes]);
+        
+        if ($result === false) {
+            return "Failed to execute stored procedure: " . $stmt->errorInfo()[2];
+        }
+        
+        return true;
+    } catch (PDOException $e) {
+        return "Database error: " . $e->getMessage();
+    } catch (Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+}
+
 }
 ?>
