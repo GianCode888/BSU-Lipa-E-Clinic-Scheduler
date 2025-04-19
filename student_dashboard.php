@@ -35,6 +35,7 @@ if (!isset($_SESSION['user_id']) || $user_role != 'student') {
             <li><a href="Student_Folder/medical_history.php">View Medical History</a></li>
             <li><a href="Student_Folder/view_availability.html">View Available Doctors</a></li>
             <li><a href="Student_Folder/appointment_status.php">Check Appointment Status</a></li>
+            <li><a href="Student_Folder/student_profile.php">View Profile</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </nav>
