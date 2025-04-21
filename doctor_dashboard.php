@@ -1,13 +1,13 @@
 <?php
-// session_start();
-// require_once 'eclinic_database.php';
+session_start();
+require_once 'eclinic_database.php';
 
-// $user_role = $_SESSION['role'];
+$user_role = $_SESSION['role'];
 
-// if (!isset($_SESSION['user_id']) || $user_role != 'doctor') {
-//     header('Location: login.php'); 
-//     exit();
-// }
+if (!isset($_SESSION['user_id']) || $user_role != 'doctor') {
+    header('Location: login.php'); 
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
