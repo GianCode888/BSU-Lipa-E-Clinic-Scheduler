@@ -37,22 +37,25 @@ class User {
 
     public function authenticate($username, $password) {
         try {
-            $stmt = $this->conn->prepare("CALL LoginUser(:username, :password)");
+            $stmt = $this->conn->prepare("CALL LoginUser(:username)");
             $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':password', $password);
             $stmt->execute();
-
+    
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            $stmt->closeCursor();
             if ($user && password_verify($password, $user['password'])) {
                 return $user;
             } else {
                 return false;
             }
-
+    
         } catch (PDOException $e) {
             die("Error authenticating: " . $e->getMessage());
         }
     }
+    
+
+    
+    
 }
 ?>

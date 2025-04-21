@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user) {
         session_start();
         $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['role'] = $user['role'];
-
+        $_SESSION['role'] = $user['role']; 
+    
         if ($user['role'] == 'doctor') {
             header("Location: doctor_dashboard.php");
         } elseif ($user['role'] == 'nurse') {
