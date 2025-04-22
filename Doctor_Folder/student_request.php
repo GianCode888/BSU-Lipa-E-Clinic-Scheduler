@@ -40,6 +40,7 @@ $requests = $doctor->student_appointment_request();
             <th>Status</th>
             <th>Reason</th>
             <th>Created At</th>
+            <th>Actions</th> 
         </tr>
     </thead>
     <tbody>
@@ -55,12 +56,20 @@ $requests = $doctor->student_appointment_request();
                     <td><?php echo htmlspecialchars($row['status']); ?></td>
                     <td><?php echo htmlspecialchars($row['reason']); ?></td>
                     <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                    <td>
+                        <form method="POST" action="doctor_crud.php" style="display:inline;">
+                            <input type="hidden" name="request_id" value="<?php echo $row['request_id']; ?>">
+                            <input type="hidden" name="request_type" value="<?php echo $row['request_type']; ?>">
+                            <button type="submit" name="action" value="approve">Approve</button>
+                            <button type="submit" name="action" value="decline" style="background-color:red;color:white;">Decline</button>
+                        </form>
+                    </td>
                 </tr>
         <?php 
             }
         } else { ?>
             <tr>
-                <td colspan="8" style="text-align:center;">No student requests found.</td>
+                <td colspan="9" style="text-align:center;">No student requests found.</td>
             </tr>
         <?php } ?>
     </tbody>
