@@ -87,6 +87,13 @@ class Doctor {
         $stmt->execute(['request_id' => $request_id]);
         return $stmt->fetchColumn(); 
     }
+
+    public function get_all_approved_requests() {
+        $stmt = $this->conn->prepare("CALL GetAllApprovedRequests()");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
