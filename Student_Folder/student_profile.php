@@ -86,5 +86,5 @@ if ($medical_info) {
     <textarea name="address" required><?= htmlspecialchars($medical_info['address']) ?></textarea>
     <br>
 
-    <input type="submit" value="<?= $medical_info ? 'Update Health Record' : 'Submit Health Record' ?>">
+    <input type="submit" value="Submit Health Record">
 </form>
