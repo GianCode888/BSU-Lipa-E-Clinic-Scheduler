@@ -28,13 +28,13 @@ class Student {
 
     public function delete_appointment($appointment_id) {
         $stmt = $this->conn->prepare("CALL DeleteAppointment(:appointmentID)");
-        $stmt->execute(['appointmentID' => $appointment_id]);
+        $stmt->execute([':appointmentID' => $appointment_id]);
         return $stmt;
     }
 
-    public function delete_medication($request_id) {
+    public function delete_medication($medication_id) {
         $stmt = $this->conn->prepare("CALL DeleteMedication(:medicationID)");
-        $stmt->execute(['medicationID' => $request_id]);
+        $stmt->execute([':medicationID' => $medication_id]);
         return $stmt;
     }
 
@@ -110,8 +110,8 @@ class Student {
                 $student->delete_appointment($_POST['appointment_id']);
                 header("Location: view_appointment.php");
                 exit;
-            } elseif (isset($_POST['request_id'])) {
-                $student->delete_medication($_POST['request_id']);
+            } elseif (isset($_POST['medication_id'])) {
+                $student->delete_medication($_POST['medication_id']);
                 header("Location: view_medication.php");
                 exit;
             }

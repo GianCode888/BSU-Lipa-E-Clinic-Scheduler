@@ -29,6 +29,7 @@ if (!isset($_SESSION['user_id']) || $user_role != 'doctor') {
     <nav>
         <ul>
             <li><a href="Doctor_Folder/student_request.php">View Student Request</a></li>
+            <li><a href="Doctor_Folder/approved_request.php">View Approved Request</a></li>
             
             <li><a href="logout.php">Logout</a></li>
         </ul>

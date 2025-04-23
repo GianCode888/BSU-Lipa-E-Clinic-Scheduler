@@ -57,11 +57,17 @@ $requests = $doctor->student_appointment_request();
                     <td><?php echo htmlspecialchars($row['reason']); ?></td>
                     <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                     <td>
+                       
+                        <a href="note_approval.php?request_id=<?php echo $row['request_id']; ?>&request_type=<?php echo $row['request_type']; ?>">
+                            <button type="button">Approve</button>
+                        </a>
+
+                        
                         <form method="POST" action="doctor_crud.php" style="display:inline;">
                             <input type="hidden" name="request_id" value="<?php echo $row['request_id']; ?>">
                             <input type="hidden" name="request_type" value="<?php echo $row['request_type']; ?>">
-                            <button type="submit" name="action" value="approve">Approve</button>
-                            <button type="submit" name="action" value="decline" style="background-color:red;color:white;">Decline</button>
+                            <input type="hidden" name="action" value="decline">
+                            <button type="submit" style="background-color:red;color:white;">Decline</button>
                         </form>
                     </td>
                 </tr>

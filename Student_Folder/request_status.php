@@ -9,7 +9,7 @@ $conn = $database->getConnect();
 $studentCrud = new Student($conn);
 $stmt = $studentCrud->view_appointmentStatus($student_id);
 
-echo "<h3>Your Appointment Status</h3>";
+echo "<h3>Your Request Status</h3>";
 echo '<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">';
 echo '<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>';
 echo '<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>';
@@ -17,6 +17,7 @@ echo '<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js
 echo "<table id='appointmentsTable' class='display'>
     <thead>
         <tr>
+            <th>Request Type</th>  
             <th>Date</th>
             <th>Time</th>
             <th>Status</th>
@@ -44,8 +45,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     }
 
     $approval_notes = !empty($row['approval_notes']) ? htmlspecialchars($row['approval_notes']) : 'No notes';
+    $request_type = !empty($row['request_type']) ? htmlspecialchars($row['request_type']) : 'Unknown'; // New
 
     echo "<tr>
+        <td>{$request_type}</td> 
         <td>{$row['appointment_date']}</td>
         <td>{$row['appointment_time']}</td>
         <td>{$row['status']}</td>

@@ -39,7 +39,7 @@ $appointments = $student->view_medicationrequest($student_id);
                         <td>" . htmlspecialchars($row['status']) . "</td>
                         <td>
                             <form method='POST' action='student_crud.php' style='display:inline-block;'>
-                                <input type='hidden' name='request_id' value='" . $row['request_id'] . "'>
+                                <input type='hidden' name='medication_id' value='" . $row['medication_id'] . "'>
                                 <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this medication request?\")'>Delete</button>
                             </form>
                         </td>
