@@ -76,8 +76,8 @@ class Doctor {
 
     
     public function get_approval_notes_for_appointment($appointment_id) {
-        $stmt = $this->conn->prepare("CALL GetApprovalNotesForAppointment(:appointment_id)");
-        $stmt->execute(['appointment_id' => $appointment_id]);
+        $stmt = $this->conn->prepare("CALL GetApprovalNotesForAppointment(:appointmentID)");
+        $stmt->execute(['appointmentID' => $appointment_id]);
         return $stmt->fetchColumn(); 
     }
 
