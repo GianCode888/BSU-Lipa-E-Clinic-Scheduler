@@ -18,7 +18,7 @@ class MedicalInfo {
         $stmt = $this->conn->prepare("CALL GetMedicalInfoByUser(?)");
         $stmt->execute([$user_id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt->closeCursor(); // this is important!
+        $stmt->closeCursor(); 
         return $result;
     }      
 
