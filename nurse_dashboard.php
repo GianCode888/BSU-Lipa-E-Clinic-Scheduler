@@ -39,7 +39,10 @@ $recentActivity = $nurseManager->getRecentActivity($nurse_id);
             <ul>
                 <li><a href="nurse_dashboard.php">Dashboard</a></li>
                 <li><a href="Nurse_Folder/completed_medications.php">Completed Medications</a></li>
-                <li><a href="patient_logs.php">Patient Logs</a></li>
+    <li><a href="Nurse_Folder/patient_log.php"> Add Patient Log</a></li>
+    <li><a href="Nurse_Folder/completed_request.php"> View Completed Logs</a></li>
+</ul>
+
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </nav>

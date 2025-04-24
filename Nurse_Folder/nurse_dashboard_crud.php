@@ -7,8 +7,8 @@ class NurseManager {
     }
     
     public function getNurseInfo($nurse_id) {
-        $stmt = $this->conn->prepare("CALL GetNurseInfo(?)");
-        $stmt->execute([$nurse_id]);
+        $stmt = $this->conn->prepare("CALL GetNurseInfo(:p_nurse_id)");
+        $stmt->execute(['p_nurse_id' => $nurse_id]);
         
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -90,33 +90,6 @@ class NurseManager {
         
         return $stmt->execute([$student_id, $nurse_id, $log_details]);
     }
-<<<<<<< HEAD
-
-
-
-public function dispenseMedication($request_id, $nurse_id, $notes = '') {
-    try {
-        // Call the stored procedure to dispense medication
-        $stmt = $this->conn->prepare("CALL DispenseMedication(?, ?, ?)");
-        
-        if (!$stmt) {
-            return "Failed to prepare statement: " . $this->conn->error;
-        }
-        
-        $result = $stmt->execute([$request_id, $nurse_id, $notes]);
-        
-        if ($result === false) {
-            return "Failed to execute stored procedure: " . $stmt->errorInfo()[2];
-        }
-        
-        return true;
-    } catch (PDOException $e) {
-        return "Database error: " . $e->getMessage();
-    } catch (Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-}
-=======
     
     public function dispenseMedication($request_id, $nurse_id, $notes = '') {
         try {
@@ -140,7 +113,6 @@ public function dispenseMedication($request_id, $nurse_id, $notes = '') {
             return "Error: " . $e->getMessage();
         }
     }
->>>>>>> 03505b4a75b1c764354b7343e0c0426bd04c9f10
 
 }
 ?>

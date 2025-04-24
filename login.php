@@ -1,18 +1,10 @@
 <?php
-<<<<<<< HEAD
+<<<<<< HEAD
 =======
-<<<<<<< HEAD
-include('eclinic_database.php');
-session_start();
-=======
->>>>>>> 03505b4a75b1c764354b7343e0c0426bd04c9f10
 require_once 'eclinic_database.php';
 require_once 'user.php';
 
 $error_message = '';
-<<<<<<< HEAD
-=======
->>>>>>> aac356d49dff9a1dff7c8b4211ddb319cb451d5f
 >>>>>>> 03505b4a75b1c764354b7343e0c0426bd04c9f10
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
