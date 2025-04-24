@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="nurse_dashboard.css">
     <link rel="stylesheet" href="medication_requests.css">
     <script>
-        // Simple inline JavaScript for toggling form visibility
+        
         function toggleForm(formId) {
             const form = document.getElementById(formId);
             if (form.style.display === 'none') {
