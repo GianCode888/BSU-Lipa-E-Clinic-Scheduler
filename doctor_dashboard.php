@@ -17,12 +17,12 @@ if (!isset($_SESSION['user_id']) || $user_role != 'doctor') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
     <link rel="stylesheet" href="CSS/doctor_dashboard.css">
+    <link rel="stylesheet" href="../CSS/student_dashboard.css">
 </head>
 <body>
 
 <header>
     <h1>Doctor Dashboard</h1>
-
 </header>
 
 <nav>
@@ -37,6 +37,23 @@ if (!isset($_SESSION['user_id']) || $user_role != 'doctor') {
 
 <footer>
     &copy; <?= date('Y'); ?> Spartan eClinic
+</footer>
+    <img src="Images/Red.png" alt="Logo" class="logo">
+    <h1>Doctor Dashboard</h1>
+    <p class="quote">Leading Innovation, Transforming Lives, Building the Motion</p>
+</header>
+
+    <nav>
+        <ul>
+            <li><a href="Doctor_Folder/student_request.php">View Student Request</a></li>
+            <li><a href="Doctor_Folder/approved_request.php">View Approved Request</a></li>
+            
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+    </nav>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Spartan eClinic Scheduler
 </footer>
 
 </body>

@@ -1,6 +1,6 @@
 <?php
 require_once '../eclinic_database.php';
-require_once 'student_crud.php';
+require_once 'student_serverside.php';
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
@@ -27,6 +27,7 @@ $appointments = $student->view_appointmentrequest($student_id);
                 <th>Appointment Date</th>
                 <th>Appointment Time</th>
                 <th>Reason</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -37,8 +38,9 @@ $appointments = $student->view_appointmentrequest($student_id);
                         <td>" . htmlspecialchars($row['appointment_date']) . "</td>
                         <td>" . htmlspecialchars($row['appointment_time']) . "</td>
                         <td>" . htmlspecialchars($row['reason']) . "</td>
+                        <td>" . htmlspecialchars($row['status']) . "</td>
                         <td>
-                            <form method='POST' action='student_crud.php' style='display:inline-block;'>
+                            <form method='POST' action='student_serverside.php' style='display:inline-block;'>
                                 <input type='hidden' name='appointment_id' value='" . $row['appointment_id'] . "'>
                                 <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this appointment?\")'>Delete</button>
                             </form>
