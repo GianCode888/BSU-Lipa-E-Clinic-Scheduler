@@ -8,25 +8,6 @@ if ($conn->connect_error) {
 
 $logs = [];
 
-
-
-$sql = "SELECT 
-            p.first_name, p.last_name,
-            n.first_name AS nurse_first_name, n.last_name AS nurse_last_name,
-            l.log_details, l.log_date
-        FROM patient_logs l
-        JOIN users p ON l.patient_id = p.id
-        JOIN users n ON l.nurse_id = n.id
-        ORDER BY l.log_date DESC";
-
-$result = $conn->query($sql);
-
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $logs[] = $row;
-    }
-}
-
 ?>
 
 <!DOCTYPE html>

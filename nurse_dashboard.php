@@ -29,7 +29,7 @@ $recentActivity = $nurseManager->getRecentActivity($nurse_id);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nurse Dashboard - eClinic</title>
-    <link rel="stylesheet" href="nurse_dashboard.css">
+    <link rel="stylesheet" href="Nurse_Folder/nurse_dashboard.css">
 </head>
 <body>
     <header>

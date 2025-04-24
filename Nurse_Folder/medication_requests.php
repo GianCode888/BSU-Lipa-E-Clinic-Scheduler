@@ -54,5 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     }
 }
 
-
+// Include the HTML template - this will use variables defined above
+include("medication_requests_view.php");
 ?>
