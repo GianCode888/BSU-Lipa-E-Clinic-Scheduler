@@ -2,7 +2,7 @@
 session_start();
 
 // Include required files
-include("eclinic_database.php");
+include("../eclinic_database.php");
 include("nurse_dashboard_crud.php");
 
 // Check if user is logged in and is a nurse

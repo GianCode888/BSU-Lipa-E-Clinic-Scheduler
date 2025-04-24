@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="nurse_dashboard.css">
     <link rel="stylesheet" href="medication_requests.css">
     <script>
-        // Simple inline JavaScript for toggling form visibility
+        
         function toggleForm(formId) {
             const form = document.getElementById(formId);
             if (form.style.display === 'none') {
@@ -24,7 +24,7 @@
         <p>Welcome, Nurse <?php echo htmlspecialchars($nurse['first_name'] . ' ' . $nurse['last_name']); ?></p>
         <nav>
             <ul>
-                <li><a href="nurse_dashboard.php">Dashboard</a></li>
+                <li><a href="../nurse_dashboard.php">Dashboard</a></li>
                 <li><a href="completed_medications.php">Completed Medications</a></li>
                 <li><a href="patient_logs.php">Patient Notes</a></li>
                 <li><a href="logout.php">Logout</a></li>
@@ -55,7 +55,7 @@
         <section>
             <div class="section-header">
                 <h2>Pending Medication Requests</h2>
-                <a href="nurse_dashboard.php" class="btn">Back to Dashboard</a>
+                <a href="../nurse_dashboard.php" class="btn">Back to Dashboard</a>
             </div>
             
             <?php if (count($pendingRequests) > 0): ?>
