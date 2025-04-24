@@ -1,13 +1,8 @@
 <?php
-<<<<<<< HEAD
-session_start();
-include 'eclinic_database.php';
-=======
 include '../eclinic_database.php';
 include '../Student_Folder/student_serverside.php';
 
 $student_id = $_SESSION['student_id'] ?? null;
->>>>>>> aac356d49dff9a1dff7c8b4211ddb319cb451d5f
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();

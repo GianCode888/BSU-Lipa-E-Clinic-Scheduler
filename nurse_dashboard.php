@@ -1,135 +1,119 @@
 <?php
-session_start();
-// Include required files
-include("eclinic_database.php");
-include("Nurse_Folder/nurse_dashboard_crud.php");
+$conn = new mysqli("localhost", "root", "", "eclinic_scheduler");
 
-// Check if user is logged in and is a nurse
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'nurse') {
-    header('Location: login.php');
-    exit();
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$nurse_id = $_SESSION['user_id'];
-$database = new DatabaseConnection();
-$nurseManager = new NurseManager($database->getConnect());
+// Handle form submission for patient log
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $student_name = $_POST['student_name'];
+    $nurse_name = $_POST['nurse_name'];
+    $log_details = $_POST['log_details'];
+    $log_date = $_POST['log_date'];
 
-// Get nurse information
-$nurse = $nurseManager->getNurseInfo($nurse_id);
+    // Extract first and last names
+    [$student_first, $student_last] = explode(' ', $student_name, 2) + ["", ""];
+    [$nurse_first, $nurse_last] = explode(' ', $nurse_name, 2) + ["", ""];
 
-// Get dashboard data
-$pendingDispensing = $nurseManager->countPendingDispensing();
-$todayAppointments = $nurseManager->countTodayAppointments($nurse_id);
-$recentActivity = $nurseManager->getRecentActivity($nurse_id);
+    // Get user IDs from names
+    $student_id = null;
+    $nurse_id = null;
+
+    $stmt1 = $conn->prepare("SELECT user_id FROM users WHERE first_name = ? AND last_name = ? AND role = 'student'");
+    $stmt1->bind_param("ss", $student_first, $student_last);
+    $stmt1->execute();
+    $stmt1->bind_result($student_id);
+    $stmt1->fetch();
+    $stmt1->close();
+
+    $stmt2 = $conn->prepare("SELECT user_id FROM users WHERE first_name = ? AND last_name = ? AND role = 'nurse'");
+    $stmt2->bind_param("ss", $nurse_first, $nurse_last);
+    $stmt2->execute();
+    $stmt2->bind_result($nurse_id);
+    $stmt2->fetch();
+    $stmt2->close();
+
+    if ($student_id && $nurse_id) {
+        $stmt = $conn->prepare("INSERT INTO patient_logs (student_id, nurse_id, log_details, log_date) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("iiss", $student_id, $nurse_id, $log_details, $log_date);
+        $stmt->execute();
+    }
+}
+
+// Get patient logs
+$logs = [];
+$sql = "SELECT 
+            p.first_name, p.last_name,
+            n.first_name AS nurse_first_name, n.last_name AS nurse_last_name,
+            l.log_details, l.log_date
+        FROM patient_logs l
+        JOIN users p ON l.student_id = p.user_id  
+        JOIN users n ON l.nurse_id = n.user_id   
+        ORDER BY l.log_date DESC";
+
+$result = $conn->query($sql);
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $logs[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nurse Dashboard - eClinic</title>
-    <link rel="stylesheet" href="Nurse_Folder/nurse_dashboard.css">
+    <title>Patient Logs</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+        form { margin-bottom: 30px; }
+        label { display: block; margin: 10px 0 5px; }
+        input, textarea { width: 100%; padding: 8px; }
+        button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #45a049; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>eClinic Scheduler</h1>
-        <p>Welcome, Nurse <?php echo htmlspecialchars($nurse['first_name'] . ' ' . $nurse['last_name']); ?></p>
-        <nav>
-            <ul>
-                <li><a href="nurse_dashboard.php">Dashboard</a></li>
-                <li><a href="completed_medications.php">Completed Medications</a></li>
-                <li><a href="Nurse_Folder/patient_log.php">Patient Logs</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
-    
-    <main>
-        <!-- Display success/error messages if any -->
-        <?php if(isset($_SESSION['message'])): ?>
-            <div class="alert alert-success">
-                <?php 
-                    echo $_SESSION['message']; 
-                    unset($_SESSION['message']);
-                ?>
-            </div>
+
+    <h2>Patient Log Form</h2>
+    <form method="POST">
+        <label for="student_name">Student Name (First Last):</label>
+        <input type="text" name="student_name" id="student_name" required>
+
+        <label for="nurse_name">Nurse Name (First Last):</label>
+        <input type="text" name="nurse_name" id="nurse_name" required>
+
+        <label for="log_details">Log Details:</label>
+        <textarea name="log_details" id="log_details" rows="4" required></textarea>
+
+        <label for="log_date">Log Date & Time:</label>
+        <input type="datetime-local" name="log_date" id="log_date" required>
+
+        <button type="submit">Submit Log</button>
+    </form>
+
+    <h2>Patient Logs</h2>
+    <table>
+        <tr>
+            <th>Student</th>
+            <th>Nurse</th>
+            <th>Log Details</th>
+            <th>Log Date</th>
+        </tr>
+        <?php if (count($logs) > 0): ?>
+            <?php foreach ($logs as $log): ?>
+                <tr>
+                    <td><?= htmlspecialchars($log['first_name'] . ' ' . $log['last_name']) ?></td>
+                    <td><?= htmlspecialchars($log['nurse_first_name'] . ' ' . $log['nurse_last_name']) ?></td>
+                    <td><?= htmlspecialchars($log['log_details']) ?></td>
+                    <td><?= htmlspecialchars($log['log_date']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr><td colspan="4">No patient logs found.</td></tr>
         <?php endif; ?>
-        
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger">
-                <?php 
-                    echo $_SESSION['error']; 
-                    unset($_SESSION['error']);
-                ?>
-            </div>
-        <?php endif; ?>
-    
-        <section class="dashboard-summary">
-            <h2>Dashboard Summary</h2>
-            <div class="dashboard-cards">
-                <div class="card">
-                    <h3>Pending Dispensing</h3>
-                    <p class="count"><?php echo $pendingDispensing; ?></p>
-                    <a href="Nurse_Folder/medication_requests.php" class="btn">View Requests</a>
-                </div>
-                
-                <div class="card">
-                    <h3>Today's Appointments</h3>
-                    <p class="count"><?php echo $todayAppointments; ?></p>
-                    <a href="Nurse_Folder/appointments.php" class="btn">View Appointments</a>
-                </div>
-            </div>
-        </section>
-        
-        <section class="recent-activity">
-            <h2>Recent Activity</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (count($recentActivity) > 0): ?>
-                        <?php foreach ($recentActivity as $activity): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($activity['first_name'] . ' ' . $activity['last_name']); ?></td>
-                                <td><?php echo htmlspecialchars($activity['reason']); ?></td>
-                                <td><?php echo ucfirst(htmlspecialchars($activity['status'])); ?></td>
-                                <td><?php echo date('M d, Y H:i', strtotime($activity['appointment_date'])); ?></td>
-                                <td>
-                                    <?php if ($activity['status'] == 'pending'): ?>
-                                        <form method="POST" action="nurse_dashboard_process.php">
-                                            <input type="hidden" name="action" value="update_appointment">
-                                            <input type="hidden" name="appointment_id" value="<?php echo $activity['appointment_id']; ?>">
-                                            <select name="new_status">
-                                                <option value="approved">Approve</option>
-                                                <option value="rejected">Reject</option>
-                                            </select>
-                                            <button type="submit">Update</button>
-                                        </form>
-                                    <?php endif; ?>
-                                    <a href="view_appointment.php?id=<?php echo $activity['appointment_id']; ?>" class="btn-small">View</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5">No recent appointments found</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </section>
-    </main>
-    
-    <footer>
-        <p>&copy; <?php echo date('Y'); ?> eClinic Scheduler</p>
-    </footer>
+    </table>
+
 </body>
 </html>

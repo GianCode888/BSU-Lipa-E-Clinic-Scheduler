@@ -1,63 +1,48 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "eclinic_scheduler");
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$logs = [];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $student = $_POST['student'];
+    $nurse = $_POST['nurse'];
+    $details = $_POST['details'];
+    $date = $_POST['date'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $sql = "SELECT 
-            p.first_name, p.last_name,
-            n.first_name AS nurse_first_name, n.last_name AS nurse_last_name,
-            l.log_details, l.log_date
-        FROM patient_logs l
-        JOIN users p ON l.student_id = p.user_id  
-        JOIN users n ON l.nurse_id = n.user_id   
-        ORDER BY l.log_date DESC";
-
-
-    $result = $conn->query($sql);
-
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $logs[] = $row;
-        }
+    $stmt = $conn->prepare("INSERT INTO completed_requests (student_name, nurse_name, details, completed_date) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $student, $nurse, $details, $date);
+    
+    if ($stmt->execute()) {
+        echo "Log submitted successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
     }
+    $stmt->close();
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Patient Logs</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-    </style>
+    <title>Manual Patient Log Form</title>
 </head>
 <body>
-    <h2>Patient Logs</h2>
-    <table>
-        <tr>
-            <th>Student</th>
-            <th>Nurse</th>
-            <th>Details</th>
-            <th>Date</th>
-        </tr>
-        <?php if (count($logs) > 0): ?>
-            <?php foreach ($logs as $log): ?>
-                <tr>
-                    <td><?= htmlspecialchars($log['first_name'] . ' ' . $log['last_name']) ?></td>
-                    <td><?= htmlspecialchars($log['nurse_first_name'] . ' ' . $log['nurse_last_name']) ?></td>
-                    <td><?= htmlspecialchars($log['log_details']) ?></td>
-                    <td><?= htmlspecialchars($log['log_date']) ?></td>
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr><td colspan="4">No patient logs found.</td></tr>
-        <?php endif; ?>
-    </table>
+    <h2>Enter Patient Log</h2>
+    <form method="POST">
+        <label>Student Name:</label><br>
+        <input type="text" name="student" required><br><br>
+
+        <label>Nurse Name:</label><br>
+        <input type="text" name="nurse" required><br><br>
+
+        <label>Details:</label><br>
+        <textarea name="details" required></textarea><br><br>
+
+        <label>Date:</label><br>
+        <input type="datetime-local" name="date" required><br><br>
+
+        <input type="submit" value="Submit Log">
+    </form>
 </body>
 </html>
