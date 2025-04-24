@@ -1,7 +1,6 @@
 <?php
 require_once '../eclinic_database.php';
-require_once 'student_crud.php';
-require_once 'medical_info.php';
+require_once 'student_serverside.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -12,9 +11,10 @@ $database = new DatabaseConnection();
 $db = $database->getConnect();
 $userId = $_SESSION['user_id'];
 
-$userDetails = new Student($db);
-$stmt = $userDetails->getUserDetails($userId);
-$userData = $stmt->fetch(PDO::FETCH_ASSOC);
+$student = new Student($db);
+
+// Profile info
+$userData = $student->getUserDetails($userId);
 
 if ($userData) {
     echo "<h2>Good day, " . htmlspecialchars($userData['first_name'] . ' ' . $userData['last_name']) . "!</h2>";
@@ -31,8 +31,8 @@ if ($userData) {
     exit();
 }
 
-$medicalInfo = new MedicalInfo();
-$medical_info = $medicalInfo->getMedicalInfo($userId);
+// Medical info
+$medical_info = $student->getMedicalInfo($userId);
 
 echo "<hr>";
 
@@ -53,7 +53,7 @@ if ($medical_info) {
 }
 ?>
 
-<form action="submit_medical_info.php" method="POST">
+<form action="student_serverside.php" method="POST">
     <label for="blood_type">Blood Type:</label>
     <input type="text" name="blood_type" value="<?= htmlspecialchars($medical_info['blood_type']) ?>" required>
     <br>

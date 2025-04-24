@@ -1,6 +1,6 @@
 <?php
 include '../eclinic_database.php';
-include '../Student_Folder/student_crud.php';
+include '../Student_Folder/student_serverside.php';
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
