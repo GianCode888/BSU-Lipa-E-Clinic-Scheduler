@@ -1,18 +1,18 @@
 <?php
+<<<<<<< HEAD
 session_start();
 include 'eclinic_database.php';
+=======
+include '../eclinic_database.php';
+include '../Student_Folder/student_serverside.php';
+
+$student_id = $_SESSION['student_id'] ?? null;
+>>>>>>> aac356d49dff9a1dff7c8b4211ddb319cb451d5f
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
-
-$student_id = $_SESSION['user_id'];
-$sql = "SELECT mh.medhistory_id, mh.log, mh.created_at, u.first_name, u.last_name 
-        FROM medical_history mh
-        LEFT JOIN users u ON mh.doctor_id = u.user_id
-        WHERE mh.student_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $student_id);
-$stmt->execute();
+$studentCrud = new Student($conn);
+$stmt = $studentCrud->view_medicalHistory($student_id);
 ?>
 
 <!DOCTYPE html>
@@ -33,23 +33,28 @@ $stmt->execute();
     <thead>
         <tr>
             <th>Date</th>
-            <th>Doctor Name</th>
+            <th>Handled By</th>
+            <th>Role</th>
             <th>Log</th>
         </tr>
     </thead>
     <tbody>
-
     <?php
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        
         $created_at = date('Y-m-d H:i:s', strtotime($row['created_at']));
+        $handled_by = htmlspecialchars(trim($row['first_name'] . ' ' . $row['last_name']));
+        $role = htmlspecialchars($row['created_by_role']);
+        $log = nl2br(htmlspecialchars($row['log']));
+        
         echo "<tr>
             <td>{$created_at}</td>
-            <td>{$row['first_name']} {$row['last_name']}</td>
-            <td>{$row['log']}</td>
+            <td>{$handled_by}</td>
+            <td>{$role}</td>
+            <td>{$log}</td>
         </tr>";
     }
     ?>
-
     </tbody>
 </table>
 

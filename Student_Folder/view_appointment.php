@@ -1,53 +1,64 @@
 <?php
-session_start();
-include '../eclinic_database.php';
+require_once '../eclinic_database.php';
+require_once 'student_serverside.php';
 
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
-
 $student_id = $_SESSION['user_id'];
+$student = new Student($conn);
+$appointments = $student->view_appointmentrequest($student_id);
+?>
 
-$sql = "SELECT * FROM appointments WHERE student_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $student_id, PDO::PARAM_INT);
-$stmt->execute();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Appointments</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+</head>
+<body>
 
-echo "<h3>Your Appointment Status</h3>";
-echo '<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">';
-echo '<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>';
-echo '<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>';
+    <h3>Your Appointments</h3>
 
-echo "<table id='appointmentsTable' class='display'>";
-echo "<thead>
-        <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
-            <th>Reason</th>
-            <th>Actions</th>
-        </tr>
-      </thead>";
-echo "<tbody>";
+    <table id="appointmentsTable" class="display">
+        <thead>
+            <tr>
+                <th>Appointment Date</th>
+                <th>Appointment Time</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            while ($row = $appointments->fetch(PDO::FETCH_ASSOC)) {
+                echo "<tr>
+                        <td>" . htmlspecialchars($row['appointment_date']) . "</td>
+                        <td>" . htmlspecialchars($row['appointment_time']) . "</td>
+                        <td>" . htmlspecialchars($row['reason']) . "</td>
+                        <td>" . htmlspecialchars($row['status']) . "</td>
+                        <td>
+                            <form method='POST' action='student_serverside.php' style='display:inline-block;'>
+                                <input type='hidden' name='appointment_id' value='" . $row['appointment_id'] . "'>
+                                <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this appointment?\")'>Delete</button>
+                            </form>
+                        </td>
+                    </tr>";
+            }
+            ?>
+        </tbody>
+    </table>
 
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    echo "<tr>
-            <td>{$row['appointment_date']}</td>
-            <td>{$row['appointment_time']}</td>
-            <td>{$row['status']}</td>
-            <td>{$row['reason']}</td>
-            <td>
-                <form method='post' action='student_crud.php' style='display:inline-block;' >
-                    <input type='hidden' name='appointment_id' value='{$row['appointment_id']}'>
-                    <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this appointment?\")'>Delete</button>
-                </form>
-            </td>
-        </tr>";
-}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
-echo "</tbody></table>";
-echo "<script>
+    <script>
         $(document).ready(function() {
             $('#appointmentsTable').DataTable(); 
         });
-      </script>";
-?>
+    </script>
+
+</body>
+</html>
