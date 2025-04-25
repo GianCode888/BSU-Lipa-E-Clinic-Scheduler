@@ -1,11 +1,10 @@
 <?php
-<<<<<< HEAD
-=======
+
 require_once 'eclinic_database.php';
 require_once 'user.php';
 
 $error_message = '';
->>>>>>> 03505b4a75b1c764354b7343e0c0426bd04c9f10
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = htmlspecialchars($_POST['username']);
@@ -40,19 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>Login - eClinic Scheduler</title>
-    <link rel="stylesheet" href="CSS/login.css">
-=======
-<<<<<<< HEAD
-    <link rel="stylesheet" href="login.css">
-    <title>Login</title>
 
-=======
     <title>Login - eClinic Scheduler</title>
     <link rel="stylesheet" href="CSS/login.css">
->>>>>>> aac356d49dff9a1dff7c8b4211ddb319cb451d5f
->>>>>>> 03505b4a75b1c764354b7343e0c0426bd04c9f10
+
+    <title>Login - eClinic Scheduler</title>
+    <link rel="stylesheet" href="CSS/login.css">
+
 </head>
 <body>
 
@@ -87,14 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </footer>
 
 </body>
-<<<<<<< HEAD
+
 </html>
 
-=======
-<<<<<<< HEAD
-</html>
-=======
+
 </html>
 
->>>>>>> aac356d49dff9a1dff7c8b4211ddb319cb451d5f
->>>>>>> 03505b4a75b1c764354b7343e0c0426bd04c9f10
+
