@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual Patient Log Form</title>
+</head>
+<body>
+    <h2>Enter Patient Log</h2>
+    <form method="POST">
+        <label>Student Name:</label><br>
+        <input type="text" name="student" required><br><br>
+
+        <label>Nurse Name:</label><br>
+        <input type="text" name="nurse" required><br><br>
+
+        <label>Details:</label><br>
+        <textarea name="details" required></textarea><br><br>
+
+        <label>Date:</label><br>
+        <input type="datetime-local" name="date" required><br><br>
+
+        <input type="submit" value="Submit Log">
+    </form>
+
+    <a href="../nurse_dashboard.php" class="btn">Back to Dashboard</a>
+</body>
+</html>

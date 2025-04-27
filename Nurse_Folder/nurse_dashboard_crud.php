@@ -78,18 +78,30 @@ class NurseManager {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function getPatientLogs() {
-        $stmt = $this->conn->prepare("CALL GetPatientLogs()");
+    public function getCompletedRequests() {
+        $stmt = $this->conn->prepare("CALL GetCompletedRequests()");
         $stmt->execute();
-        
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function addPatientLog($student_id, $nurse_id, $log_details) {
-        $stmt = $this->conn->prepare("CALL AddPatientLog(?, ?, ?)");
-        
-        return $stmt->execute([$student_id, $nurse_id, $log_details]);
+
+    // Insert patient log using stored procedure
+    public function addPatientLog($student, $nurse, $details, $date) {
+        $stmt = $this->conn->prepare("CALL InsertPatientLog(?, ?, ?, ?)");
+        return $stmt->execute([$student, $nurse, $details, $date]);
     }
+
+    
+    public function deleteCompletedRequest($id) {
+        $stmt = $this->conn->prepare("CALL DeleteCompletedRequest(?)");
+        return $stmt->execute([$id]);
+    }
+    
+
+
+
+
+
+
     
     public function dispenseMedication($request_id, $nurse_id, $notes = '') {
         try {

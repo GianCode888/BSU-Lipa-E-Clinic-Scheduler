@@ -35,18 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
+
     <title>Sign up - eClinic Scheduler</title>
     <link rel="stylesheet" href="CSS/signup.css">
-=======
-<<<<<<< HEAD
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="signup.css"> 
-=======
-    <title>Sign up - eClinic Scheduler</title>
-    <link rel="stylesheet" href="CSS/signup.css">
->>>>>>> aac356d49dff9a1dff7c8b4211ddb319cb451d5f
->>>>>>> 03505b4a75b1c764354b7343e0c0426bd04c9f10
+
+ 
+
 </head>
 <body>
 
