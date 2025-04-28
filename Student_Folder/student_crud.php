@@ -68,9 +68,9 @@ class Student {
         return $stmt;
     }
 
-    public function view_appointmentStatus($user_id) {
-        $stmt = $this->conn->prepare("CALL ViewAppointmentStatus(:user_id)");
-        $stmt->execute([':user_id' => $user_id]);
+    public function view_requestStatus($user_id) {
+        $stmt = $this->conn->prepare("CALL ViewRequestStatus(:userID)");
+        $stmt->execute([':userID' => $user_id]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
         return $results;
