@@ -26,6 +26,7 @@ $requests = $doctor->student_appointment_request();
     </script>
 </head>
 <body>
+<button type="button" onclick="history.back()">Home</button>
 
 <h2>Student Requests (Appointments & Medications)</h2>
 
