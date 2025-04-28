@@ -5,7 +5,7 @@ require_once '../eclinic_database.php';
 $database = new DatabaseConnection();
 $conn = $database->getConnect();
 
-$student_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
 
 class Student {
     private $conn;
@@ -14,16 +14,16 @@ class Student {
         $this->conn = $db;
     }
 
-    public function request_appointment($student_id, $appointment_date, $appointment_time, $reason){
-        $stmt = $this->conn->prepare("CALL RequestAppointment(:student_id, :appointment_date, :appointment_time, :reason)");
-        $stmt->execute([':student_id'=>$student_id, ':appointment_date'=>$appointment_date, ':appointment_time'=>$appointment_time, ':reason'=>$reason]);
+    public function request_appointment($user_id, $appointment_date, $appointment_time, $reason){
+        $stmt = $this->conn->prepare("CALL RequestAppointment(:user_id, :appointment_date, :appointment_time, :reason)");
+        $stmt->execute([':user_id'=>$user_id, ':appointment_date'=>$appointment_date, ':appointment_time'=>$appointment_time, ':reason'=>$reason]);
         $stmt->closeCursor();
         return true;
     }
 
-    public function request_medication($student_id, $medication){
-        $stmt = $this->conn->prepare("CALL RequestMedication(:student_id, :medication)");
-        $stmt->execute([':student_id'=>$student_id, 'medication'=>$medication]);
+    public function request_medication($user_id, $medication){
+        $stmt = $this->conn->prepare("CALL RequestMedication(:user_id, :medication)");
+        $stmt->execute([':user_id'=>$user_id, 'medication'=>$medication]);
         $stmt->closeCursor();
         return true;
     }
@@ -42,22 +42,21 @@ class Student {
         return true;
     }
 
-    public function view_appointmentrequest($student_id) {
-        $stmt = $this->conn->prepare("CALL ViewStudentAppointments(:studentID)");
-        $stmt->execute([':studentID' => $student_id]);
+    public function view_appointmentrequest($user_id) {
+        $stmt = $this->conn->prepare("CALL ViewStudentAppointments(:userID)");
+        $stmt->execute([':userID' => $user_id]);
         return $stmt; 
     }
     
-
-    public function view_medicationrequest($student_id) {
-        $stmt = $this->conn->prepare("CALL ViewStudentMedication(:medicationID)");
-        $stmt->execute([':medicationID' => $student_id]);
+    public function view_medicationrequest($user_id) {
+        $stmt = $this->conn->prepare("CALL ViewStudentMedication(:userID)");
+        $stmt->execute([':userID' => $user_id]);
         return $stmt;
     }
 
-    public function view_medicalHistory($student_id) {
-        $stmt = $this->conn->prepare("CALL ViewStudentMedHistory(:student_id)");
-        $stmt->execute([':student_id' => $student_id]);
+    public function view_medicalHistory($user_id) {
+        $stmt = $this->conn->prepare("CALL ViewStudentMedHistory(:user_id)");
+        $stmt->execute([':user_id' => $user_id]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
         return $results;
@@ -69,9 +68,9 @@ class Student {
         return $stmt;
     }
 
-    public function view_appointmentStatus($student_id) {
-        $stmt = $this->conn->prepare("CALL ViewAppointmentStatus(:student_id)");
-        $stmt->execute([':student_id' => $student_id]);
+    public function view_appointmentStatus($user_id) {
+        $stmt = $this->conn->prepare("CALL ViewAppointmentStatus(:user_id)");
+        $stmt->execute([':user_id' => $user_id]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
         return $results;

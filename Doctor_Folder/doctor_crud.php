@@ -65,10 +65,10 @@ class Doctor {
         return $stmt;
     }
 
-    public function add_approval_notes_to_medication($request_id, $approval_notes) {
-        $stmt = $this->conn->prepare("CALL AddApprovalNotesToMedicationRequest(:request_id, :approval_notes)");
+    public function add_approval_notes_to_medication($medication_id, $approval_notes) {
+        $stmt = $this->conn->prepare("CALL AddApprovalNotesToMedicationRequest(:medication_id, :approval_notes)");
         $stmt->execute([
-            'request_id' => $request_id,
+            'medication_id' => $medication_id,
             'approval_notes' => $approval_notes
         ]);
         return $stmt;
