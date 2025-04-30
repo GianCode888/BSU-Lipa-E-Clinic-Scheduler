@@ -62,12 +62,13 @@ class Student {
         return $results;
     }
 
-    public function view_availableDoctor($available_day) {
-        $stmt = $this->conn->prepare("CALL ViewAvailableDoctor(:available_day)");
-        $stmt->execute([':available_day' => $available_day]);
-        return $stmt;
+    public function view_availableDoctorByDay($day_name) {
+        $stmt = $this->conn->prepare("CALL ViewAvailableDoctorByDay(:i_day_name)");
+        $stmt->execute([':i_day_name' => $day_name]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    
+    
     public function view_requestStatus($user_id) {
         $stmt = $this->conn->prepare("CALL ViewRequestStatus(:userID)");
         $stmt->execute([':userID' => $user_id]);

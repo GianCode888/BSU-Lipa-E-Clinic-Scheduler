@@ -1,5 +1,5 @@
 <?php
-include '../Doctor_Folder/doctor_crud.php';
+include '../Doctor_Folder/doctor_serverside.php';
 require_once '../eclinic_database.php';
 
 $database = new DatabaseConnection();
@@ -63,7 +63,7 @@ $requests = $doctor->student_appointment_request();
                         </a>
 
                         
-                        <form method="POST" action="doctor_crud.php" style="display:inline;">
+                        <form method="POST" action="doctor_serverside.php" style="display:inline;">
                             <input type="hidden" name="request_id" value="<?php echo $row['request_id']; ?>">
                             <input type="hidden" name="request_type" value="<?php echo $row['request_type']; ?>">
                             <input type="hidden" name="action" value="decline">
