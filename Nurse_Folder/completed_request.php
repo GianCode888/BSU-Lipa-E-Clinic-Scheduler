@@ -6,61 +6,57 @@ $database = new DatabaseConnection();
 $db = $database->getConnect();
 $nurseManager = new NurseManager($db);
 
-// Handle deletion kapag may na-click na delete
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    if ($nurseManager->deleteCompletedRequest($id)) {
-        header("Location: completed_request.php");
-        exit();
+// Handle delete request
+if (isset($_GET['id'])) {
+    $log_id = $_GET['id'];
+
+    if ($nurseManager->deleteCompletedRequest($log_id)) {
+        echo "<script>alert('Request deleted successfully!'); window.location.href='completed_request.php';</script>";
     } else {
-        echo "Failed to delete log.";
+        echo "<script>alert('Failed to delete request.');</script>";
     }
 }
 
-// Fetch all completed logs
+// Fetch completed logs
 $completedLogs = $nurseManager->getCompletedRequests();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Completed Requests</title>
+    <title>Completed Patient Logs</title>
     <style>
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 30px;
         }
         th, td {
-            border: 1px solid #999;
+            border: 1px solid #aaa;
             padding: 10px;
-            text-align: left;
         }
         th {
             background-color: #eee;
         }
-        button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+        .btn-delete {
+            color: red;
             cursor: pointer;
-        }
-        button:hover {
-            background-color: #c0392b;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-<h2>Completed Requests</h2>
+<h2>Completed Patient Logs</h2>
 
 <table>
     <thead>
         <tr>
             <th>Student Name</th>
+            <th>Contact</th>
+            <th>Address</th>
             <th>Nurse Name</th>
             <th>Details</th>
             <th>Completed Date</th>
@@ -68,28 +64,28 @@ $completedLogs = $nurseManager->getCompletedRequests();
         </tr>
     </thead>
     <tbody>
-    <?php if (!empty($completedLogs)): ?>
-        <?php foreach ($completedLogs as $log): ?>
+        <?php if (!empty($completedLogs)): ?>
+            <?php foreach ($completedLogs as $log): ?>
+                <tr>
+                    <td><?= htmlspecialchars($log['student_name']) ?></td>
+                    <td><?= htmlspecialchars($log['contact']) ?></td>
+                    <td><?= htmlspecialchars($log['address']) ?></td>
+                    <td><?= htmlspecialchars($log['nurse_name']) ?></td>
+                    <td><?= htmlspecialchars($log['details']) ?></td>
+                    <td><?= htmlspecialchars($log['completed_date']) ?></td>
+                    <td><a href="delete_completed_request.php?id=<?= $log['id'] ?>" class="btn-delete">Delete</a></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
             <tr>
-                <td><?= htmlspecialchars($log['student_name']) ?></td>
-                <td><?= htmlspecialchars($log['nurse_name']) ?></td>
-                <td><?= htmlspecialchars($log['details']) ?></td>
-                <td><?= htmlspecialchars($log['completed_date']) ?></td>
-                <td>
-                    <form method="GET" style="display:inline;">
-                        <input type="hidden" name="delete" value="<?= $log['id'] ?>">
-                        <button type="submit" onclick="return confirm('Are you sure you want to delete this log?');">Delete</button>
-                    </form>
-                </td>
+                <td colspan="7">No completed requests found.</td>
             </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan="5">No completed requests found.</td>
-        </tr>
-    <?php endif; ?>
+        <?php endif; ?>
     </tbody>
 </table>
+<form method="POST">
 <a href="../nurse_dashboard.php" class="btn">Back to Dashboard</a>
+</form>
+
 </body>
 </html>

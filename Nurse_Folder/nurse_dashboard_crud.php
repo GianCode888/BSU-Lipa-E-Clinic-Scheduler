@@ -85,16 +85,26 @@ class NurseManager {
     }
 
     // Insert patient log using stored procedure
-    public function addPatientLog($student, $nurse, $details, $date) {
-        $stmt = $this->conn->prepare("CALL InsertPatientLog(?, ?, ?, ?)");
-        return $stmt->execute([$student, $nurse, $details, $date]);
+    public function addPatientLog($student_name, $contact, $address, $nurse_name, $log_details) {
+        $stmt = $this->conn->prepare("CALL AddPatientLog(?, ?, ?, ?, ?)");
+        return $stmt->execute([$student_name, $contact, $address, $nurse_name, $log_details]);
     }
-
     
-    public function deleteCompletedRequest($id) {
+    
+    public function deleteCompletedRequest($log_id) {
         $stmt = $this->conn->prepare("CALL DeleteCompletedRequest(?)");
-        return $stmt->execute([$id]);
+        $stmt->execute([$log_id]);
+    
+        // Check how many rows were affected by the DELETE operation
+        if ($stmt->rowCount() > 0) {
+            return true;  // Successfully deleted the log
+        } else {
+            return false;  // No rows affected, meaning no log found with that ID
+        }
     }
+    
+    
+    
     
 
 

@@ -1,26 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Manual Patient Log Form</title>
+    <meta charset="UTF-8">
+    <title>Patient Log</title>
+    <style>
+        form {
+            margin-bottom: 30px;
+        }
+        input, textarea {
+            display: block;
+            width: 300px;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 10px;
+        }
+        th {
+            background-color: #eee;
+        }
+    </style>
 </head>
 <body>
-    <h2>Enter Patient Log</h2>
-    <form method="POST">
-        <label>Student Name:</label><br>
-        <input type="text" name="student" required><br><br>
 
-        <label>Nurse Name:</label><br>
-        <input type="text" name="nurse" required><br><br>
+<h2>Add Patient Log</h2>
 
-        <label>Details:</label><br>
-        <textarea name="details" required></textarea><br><br>
-
-        <label>Date:</label><br>
-        <input type="datetime-local" name="date" required><br><br>
-
-        <input type="submit" value="Submit Log">
-    </form>
-
+<form method="POST">
+    <input type="text" name="student_name" placeholder="Student Name" required>
+    <input type="text" name="contact" placeholder="Contact Number" required>
+    <input type="text" name="address" placeholder="Address" required>
+    <input type="text" name="nurse_name" placeholder="Nurse Name" required>
+    <textarea name="log_details" placeholder="Log Details" rows="4" required></textarea>
+    <button type="submit">Submit</button>
     <a href="../nurse_dashboard.php" class="btn">Back to Dashboard</a>
-</body>
+</form>
+
+
 </html>
