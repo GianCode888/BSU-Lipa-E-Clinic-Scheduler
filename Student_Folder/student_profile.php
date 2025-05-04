@@ -17,6 +17,7 @@ $student = new Student($db);
 $userData = $student->getUserDetails($userId);
 
 if ($userData) {
+    echo '<button type="button" onclick="history.back()">Home</button>';
     echo "<h2>Good day, " . htmlspecialchars($userData['first_name'] . ' ' . $userData['last_name']) . "!</h2>";
     echo "<p>This section provides a comprehensive view of your personal details, basic health information, and medical history within the school. You can review and update any necessary details to ensure your health records are accurate and up to date.</p>";
     echo "<h3>Your Profile</h3>";

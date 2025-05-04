@@ -30,6 +30,7 @@ $approved_requests = $doctor->get_all_approved_requests();
     </script>
 </head>
 <body>
+    <button type="button" onclick="history.back()">Home</button>
 
     <h2>All Approved Requests</h2>
 
