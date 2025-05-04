@@ -84,6 +84,10 @@ class NurseManager {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
+
+
     // Insert patient log using stored procedure
     public function addPatientLog($student_name, $contact, $address, $nurse_name, $log_details) {
         $stmt = $this->conn->prepare("CALL AddPatientLog(?, ?, ?, ?, ?)");
@@ -106,11 +110,7 @@ class NurseManager {
     
     
     
-
-
-
-
-
+    
 
     
     public function dispenseMedication($request_id, $nurse_id, $notes = '') {

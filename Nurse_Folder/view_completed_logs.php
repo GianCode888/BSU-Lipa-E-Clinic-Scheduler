@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
     $log_id = $_GET['id'];
 
     if ($nurseManager->deleteCompletedRequest($log_id)) {
-        echo "<script>alert('Request deleted successfully!'); window.location.href='completed_request.php';</script>";
+        echo "<script>alert('Request deleted successfully!'); window.location.href='view_completed_log.php';</script>";
     } else {
         echo "<script>alert('Failed to delete request.');</script>";
     }
