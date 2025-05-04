@@ -33,7 +33,7 @@ class Doctor {
     public function decline_appointment_request($appointment_id) {
         $stmt = $this->conn->prepare("CALL DeclineAppointmentRequest(:appointmentID)");
         $stmt->execute(['appointmentID' => $appointment_id]);
-        return $stmt;
+        return $stmt;   
     }
 
     public function add_approval_notes_to_appointment($appointment_id, $approval_notes, $user_id) {
