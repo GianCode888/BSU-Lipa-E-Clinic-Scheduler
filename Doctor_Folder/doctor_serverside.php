@@ -2,8 +2,11 @@
 require_once '../eclinic_database.php';
 require_once 'doctor_crud.php';
 
+// Ensure the user is logged in as a doctor
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'doctor') {
-    die("You must be logged in as a doctor to perform this action.");
+    // If not logged in, redirect to login page
+    header("Location: login.php");
+    exit();
 }
 
 $user_id = $_SESSION['user_id'];
@@ -11,13 +14,23 @@ $database = new DatabaseConnection();
 $conn = $database->getConnect();
 $doctor = new Doctor($conn);
 
+// Check if the form is being submitted via POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['doctor_name'], $_POST['available_date'], $_POST['start_time'], $_POST['end_time'], $_POST['notes'])) {
+    // Handle doctor availability submission
+    if (isset($_POST['available_date'], $_POST['start_time'], $_POST['end_time'], $_POST['notes'])) {
         handleDoctorAvailability($doctor, $user_id, $_POST['available_date'], $_POST['start_time'], $_POST['end_time'], $_POST['notes']);
     }
+
+    // Handle prescription submission (diagnosis, prescription, student user_id)
+    if (isset($_POST['diagnosis'], $_POST['prescription'], $_POST['student_user_id'])) {
+        handlePrescriptionSubmission($doctor, $_POST['student_user_id'], $_POST['diagnosis'], $_POST['prescription']);
+    }
+
+    // Handle request actions (approve/decline)
     handleRequestActions($doctor);
 }
 
+// Fetch doctor schedule if requested
 $schedule_data = [];
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['view_schedule'])) {
     try {
@@ -27,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['view_schedule'])) {
     }
 }
 
+// Function to handle doctor availability submission
 function handleDoctorAvailability($doctor, $user_id, $available_date, $start_time, $end_time, $note) {
     if ($available_date && $start_time && $end_time) {
         try {
@@ -41,6 +55,40 @@ function handleDoctorAvailability($doctor, $user_id, $available_date, $start_tim
     }
 }
 
+// Function to handle prescription submission
+function handlePrescriptionSubmission($doctor, $student_user_id, $diagnosis, $prescription) {
+    try {
+        // Validate required fields
+        if (empty($student_user_id) || empty($diagnosis) || empty($prescription)) {
+            throw new Exception("All fields are required.");
+        }
+
+        // Automatically set the current date for created_at
+        $created_at = date('Y-m-d'); // Get the current date
+
+        // Check if the student already has a prescription
+        $students_with_prescriptions = $doctor->get_students_with_prescriptions();
+        $prescribed_user_ids = array_column($students_with_prescriptions, 'user_id');
+
+        if (in_array($student_user_id, $prescribed_user_ids)) {
+            // Student already has a prescription
+            echo "Student already has a prescription.";
+            header("Location: prescription.php"); // Redirect after error
+            exit();
+        }
+
+        // Insert the prescription into the database using the stored procedure
+        $doctor->insert_prescription($student_user_id, $diagnosis, $prescription, $created_at);
+
+        echo "Prescription saved successfully!";
+        header("Location: prescription.php"); // Redirect after saving the prescription
+        exit();
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+// Function to handle request actions (approve/decline)
 function handleRequestActions($doctor) {
     $request_id = $_POST['request_id'] ?? '';
     $request_type = $_POST['request_type'] ?? '';

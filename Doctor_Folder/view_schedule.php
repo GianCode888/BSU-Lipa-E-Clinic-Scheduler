@@ -21,8 +21,8 @@ $schedule_data = $doctor->view_schedule($user_id);
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
-
     <h1>Schedule for User ID: <?php echo htmlspecialchars($user_id); ?></h1>
+    <button type="button" onclick="window.location.href='../doctor_dashboard.php'">Home</button>
 
     <?php if (!empty($schedule_data)): ?>
         <table id="scheduleTable" class="display">
@@ -61,6 +61,5 @@ $schedule_data = $doctor->view_schedule($user_id);
             }
         }
     </script>
-
 </body>
 </html>

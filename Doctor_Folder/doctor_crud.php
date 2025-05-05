@@ -33,7 +33,7 @@ class Doctor {
     public function decline_appointment_request($appointment_id) {
         $stmt = $this->conn->prepare("CALL DeclineAppointmentRequest(:appointmentID)");
         $stmt->execute(['appointmentID' => $appointment_id]);
-        return $stmt;   
+        return $stmt;
     }
 
     public function add_approval_notes_to_appointment($appointment_id, $approval_notes, $user_id) {
@@ -62,10 +62,7 @@ class Doctor {
 
     public function add_approval_notes_to_medication($medication_id, $approval_notes) {
         $stmt = $this->conn->prepare("CALL AddApprovalNotesToMedicationRequest(:medication_id, :approval_notes)");
-        $stmt->execute([
-            'medication_id' => $medication_id,
-            'approval_notes' => $approval_notes
-        ]);
+        $stmt->execute(['medication_id' => $medication_id, 'approval_notes' => $approval_notes]);
         return $stmt;
     }
 
@@ -83,7 +80,6 @@ class Doctor {
         } else {
             return null;
         }
-
         $stmt->execute(['request_id' => $request_id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -117,14 +113,34 @@ class Doctor {
         $stmt->execute([$user_id, $available_date, $start_time, $end_time, $note]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
 
     public function view_schedule($user_id) {
         $stmt = $this->conn->prepare("CALL ViewSchedule(?)");
         $stmt->execute([$user_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
 
+    public function get_approved_students() {
+        $stmt = $this->conn->prepare("CALL GetApprovedStudents()");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function insert_prescription($user_id, $diagnosis, $prescription, $created_at) {
+        try {
+            $stmt = $this->conn->prepare("CALL AddPrescription(:user_id, :diagnosis, :prescription, :created_at)");
+            $stmt->execute(['user_id' => $user_id, 'diagnosis' => $diagnosis, 'prescription' => $prescription, 'created_at' => $created_at]);
+            return true;
+        } catch (Exception $e) {
+            throw new Exception("Error inserting prescription: " . $e->getMessage());
+        }
+    }
+
+    public function get_students_with_prescriptions() {
+        $query = "CALL GetStudentsWithPrescriptions()";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
