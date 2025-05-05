@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle prescription submission (diagnosis, prescription, student user_id)
     if (isset($_POST['diagnosis'], $_POST['prescription'], $_POST['student_user_id'])) {
-        handlePrescriptionSubmission($doctor, $_POST['student_user_id'], $_POST['diagnosis'], $_POST['prescription']);
+        handlePrescriptionSubmission($doctor, $_POST['student_user_id'], $_POST['diagnosis'], $_POST['prescription'], $user_id);
     }
 
     // Handle request actions (approve/decline)
@@ -56,7 +56,7 @@ function handleDoctorAvailability($doctor, $user_id, $available_date, $start_tim
 }
 
 // Function to handle prescription submission
-function handlePrescriptionSubmission($doctor, $student_user_id, $diagnosis, $prescription) {
+function handlePrescriptionSubmission($doctor, $student_user_id, $diagnosis, $prescription, $doctor_user_id) {
     try {
         // Validate required fields
         if (empty($student_user_id) || empty($diagnosis) || empty($prescription)) {
@@ -64,24 +64,23 @@ function handlePrescriptionSubmission($doctor, $student_user_id, $diagnosis, $pr
         }
 
         // Automatically set the current date for created_at
-        $created_at = date('Y-m-d'); // Get the current date
+        $created_at = date('Y-m-d');
 
         // Check if the student already has a prescription
         $students_with_prescriptions = $doctor->get_students_with_prescriptions();
         $prescribed_user_ids = array_column($students_with_prescriptions, 'user_id');
 
         if (in_array($student_user_id, $prescribed_user_ids)) {
-            // Student already has a prescription
             echo "Student already has a prescription.";
-            header("Location: prescription.php"); // Redirect after error
+            header("Location: prescription.php");
             exit();
         }
 
-        // Insert the prescription into the database using the stored procedure
-        $doctor->insert_prescription($student_user_id, $diagnosis, $prescription, $created_at);
+        // Insert the prescription into the database using the stored procedure (including prescription_by)
+        $doctor->insert_prescription($student_user_id, $diagnosis, $prescription, $created_at, $doctor_user_id);
 
         echo "Prescription saved successfully!";
-        header("Location: prescription.php"); // Redirect after saving the prescription
+        header("Location: prescription.php");
         exit();
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();

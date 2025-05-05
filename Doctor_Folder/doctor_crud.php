@@ -38,7 +38,11 @@ class Doctor {
 
     public function add_approval_notes_to_appointment($appointment_id, $approval_notes, $user_id) {
         $stmt = $this->conn->prepare("CALL AddApprovalNotesToAppointment(:appointment_id, :approval_notes, :user_id)");
-        $stmt->execute(['appointment_id' => $appointment_id, 'approval_notes' => $approval_notes, 'user_id' => $user_id]);
+        $stmt->execute([
+            'appointment_id' => $appointment_id,
+            'approval_notes' => $approval_notes,
+            'user_id' => $user_id
+        ]);
         return $stmt;
     }
 
@@ -126,10 +130,16 @@ class Doctor {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function insert_prescription($user_id, $diagnosis, $prescription, $created_at) {
+    public function insert_prescription($user_id, $diagnosis, $prescription, $created_at, $prescription_by) {
         try {
-            $stmt = $this->conn->prepare("CALL AddPrescription(:user_id, :diagnosis, :prescription, :created_at)");
-            $stmt->execute(['user_id' => $user_id, 'diagnosis' => $diagnosis, 'prescription' => $prescription, 'created_at' => $created_at]);
+            $stmt = $this->conn->prepare("CALL AddPrescription(:user_id, :diagnosis, :prescription, :created_at, :prescription_by)");
+            $stmt->execute([
+                'user_id' => $user_id,
+                'diagnosis' => $diagnosis,
+                'prescription' => $prescription,
+                'created_at' => $created_at,
+                'prescription_by' => $prescription_by
+            ]);
             return true;
         } catch (Exception $e) {
             throw new Exception("Error inserting prescription: " . $e->getMessage());

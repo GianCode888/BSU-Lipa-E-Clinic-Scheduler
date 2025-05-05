@@ -12,6 +12,8 @@ if (isset($_GET['available_date']) && $_GET['available_date'] !== '') {
 
     echo "<h3>Available Doctors on {$day_name}</h3>";
 
+    echo '<button type="button" onclick="window.location.href=\'view_availability.html\'">Back</button>';
+
     echo '<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">';
     echo '<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>';
     echo '<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>';

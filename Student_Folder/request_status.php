@@ -26,7 +26,7 @@ $requests = $student->view_requestStatus($student_id);
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
-    <button type="button" onclick="history.back()">Home</button>
+<button type="button" onclick="window.location.href='../student_dashboard.php'">Home</button>
     
     <h3>Your Request Status</h3>
 

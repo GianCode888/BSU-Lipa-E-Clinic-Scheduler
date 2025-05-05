@@ -105,6 +105,15 @@ class Student {
         $stmt->execute([$user_id, $blood_type, $allergies, $med_condition, $medications_taken, $emergency_contact_name, $relationship, $contact_number, $address]);
         $stmt->closeCursor();
         return true;
-    }    
+    } 
+    
+    public function get_prescription($userId) {
+        $stmt = $this->conn->prepare("CALL GetPrescription(?)");
+        $stmt->execute([$userId]);
+        $prescriptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $prescriptions;
+    }
+     
 }
 ?>
