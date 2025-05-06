@@ -10,12 +10,11 @@ $notification = '';
 $error_message = '';
 $login_type = isset($_GET['type']) ? $_GET['type'] : 'user';
 
-// Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Admin login
     if (isset($_POST['admin_login'])) {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
+        $email = htmlspecialchars($_POST['email']);
+        $password = htmlspecialchars($_POST['password']);
         
         $adminService = new AdminService();
         $role = $adminService->getAdminRole($email, $password);
@@ -23,8 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($role !== null) {
             $_SESSION['role'] = $role;
             $_SESSION['email'] = $email;
-            
-            // Store login success notification in session to display after redirect
             $_SESSION['login_notification'] = $notificationService->loginSuccess($role);
             
             if ($role === 'super_admin') {
@@ -39,20 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } 
     // Regular user login
-    else {
+    elseif (isset($_POST['login'])) {
         $username = htmlspecialchars($_POST['username']);
         $password = htmlspecialchars($_POST['password']);
 
         $database = new DatabaseConnection();
         $conn = $database->getConnect();
-        
-        // Use direct SQL query instead of the stored procedure to avoid errors
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
-        $stmt->bindParam(':username', $username);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($user && $password === $user['password']) {
+        $userClass = new User($conn);
+        $user = $userClass->authenticate($username, $password);
+
+        if ($user) {
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['role'] = $user['role']; 
         
@@ -82,44 +75,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-    <header>
-        <img src=".//Images/Spartan.png" alt="eClinic Logo">
-        <h1>eClinic Scheduler</h1>
-        <p>Manage your appointments with ease.</p>
-    </header>
+<header>
+    <img src="./Images/Spartan.png" alt="eClinic Logo">
+    <h1>eClinic Scheduler</h1>
+    <p>Manage your appointments with ease.</p>
+</header>
 
-    <div class="form-container">
-        <div class="login-toggle" style="text-align: center; margin-bottom: 15px;">
-            <a href="login.php" 
-                style="margin-right: 10px; text-decoration: none; font-family: Arial, sans-serif; font-size: 16px; color: #333; <?php echo ($login_type != 'admin') ? 'font-weight: bold; color:rgb(255, 0, 0);' : ''; ?>">
-                    User Login
-                </a> | 
-            <a href="login.php?type=admin" 
-                style="margin-left: 10px; text-decoration: none; font-family: Arial, sans-serif; font-size: 16px; color: #333; <?php echo ($login_type == 'admin') ? 'font-weight: bold; color:rgb(255, 0, 0);' : ''; ?>">
-                    Admin Login
-            </a>
+<div class="form-container">
+    <div class="login-toggle" style="text-align: center; margin-bottom: 15px;">
+        <a href="login.php"
+           style="margin-right: 10px; text-decoration: none; font-family: Arial, sans-serif; font-size: 16px; color: #333; <?php echo ($login_type != 'admin') ? 'font-weight: bold; color:rgb(255, 0, 0);' : ''; ?>">
+            User Login
+        </a> |
+        <a href="login.php?type=admin"
+           style="margin-left: 10px; text-decoration: none; font-family: Arial, sans-serif; font-size: 16px; color: #333; <?php echo ($login_type == 'admin') ? 'font-weight: bold; color:rgb(255, 0, 0);' : ''; ?>">
+            Admin Login
+        </a>
+    </div>
 
-        </div>
-
-        <?php if ($login_type == 'admin'): ?>
+    <?php if ($login_type == 'admin'): ?>
         <!-- Admin Login Form -->
         <form method="POST" action="login.php?type=admin">
             <?php if (!empty($error_message) && isset($_POST['admin_login'])): ?>
                 <div class="error-message"><?php echo $error_message; ?></div>
             <?php endif; ?>
-            
-            <label for="email">Username:</label>
+
+            <label for="email">Email:</label>
             <input type="text" id="email" name="email" required>
-            
+
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
-            
+
             <button type="submit" name="admin_login">Login</button>
         </form>
-        <?php else: ?>
+    <?php else: ?>
         <!-- User Login Form -->
         <form method="POST" action="login.php">
-            <?php if (!empty($error_message) && !isset($_POST['admin_login'])): ?>
+            <?php if (!empty($error_message) && isset($_POST['login'])): ?>
                 <div class="error-message"><?php echo $error_message; ?></div>
             <?php endif; ?>
 
@@ -135,13 +127,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p>Don't have an account? <a href="signup.php">Sign up here!</a></p>
             </div>
         </form>
-        <?php endif; ?>
-    </div>
+    <?php endif; ?>
+</div>
 
-    <footer>
-        &copy; <?php echo date('Y'); ?> Spartan eClinic Scheduler
-    </footer>
+<footer>
+    &copy; <?php echo date('Y'); ?> Spartan eClinic Scheduler
+</footer>
 
-    <?php echo $notification; ?>
+<?php echo $notification; ?>
+
 </body>
 </html>
