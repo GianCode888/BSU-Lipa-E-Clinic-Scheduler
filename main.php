@@ -10,6 +10,7 @@
     <title>Main Page</title>
 </head>
 <body>
+    <P>home page </P>
     
 <a href="login.php">Log In</a><br>
 <a href="signup.php">Sign up</a>
