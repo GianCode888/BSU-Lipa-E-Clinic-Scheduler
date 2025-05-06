@@ -5,12 +5,8 @@ class AdminService {
             'email' => 'superadmin@eclinic',
             'password' => 'admin'
         ],
-        'medical_data_admin' => [
-            'email' => 'medicaladmin@eclinic',
-            'password' => 'admin'
-        ],
-        'operation_admin' => [
-            'email' => 'operationadmin@eclinic',
+        'care_admin' => [
+            'email' => 'careadmin@eclinic',
             'password' => 'admin'
         ]
     ];

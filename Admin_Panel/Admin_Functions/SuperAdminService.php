@@ -1,16 +1,18 @@
 <?php
 
 require_once '../../eclinic_database.php'; 
+require_once 'ErrorHandler.php';
 
 class SuperAdminService {
     private $conn;
+    private $errorHandler;
 
     public function __construct() {
         $db = new DatabaseConnection();
         $this->conn = $db->getConnect();
+        $this->errorHandler = new ErrorHandler();
     }
 
-    // Dashboard methods
     public function getDashboardStats() {
         $stmt = $this->conn->prepare("CALL GetDashboardStats()");
         $stmt->execute();
@@ -24,7 +26,22 @@ class SuperAdminService {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // User management methods
+    public function getRecentAppointments($limit) {
+        $stmt = $this->conn->prepare("CALL GetRecentAppointments(:limit)");
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getRecentMedicalRecords($limit) {
+        $stmt = $this->conn->prepare("CALL GetRecentMedicalRecords(:limit)");
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+
+
     public function getAllUsers() {
         $stmt = $this->conn->prepare("CALL GetAllUsers()");
         $stmt->execute();
@@ -39,6 +56,34 @@ class SuperAdminService {
     }
 
     public function updateUser($userId, $firstName, $lastName, $email, $userType, $address, $contactNumber) {
+        $originalUser = $this->getUserById($userId); 
+        $this->errorHandler->clearErrors();
+        
+        // Validate that the user exists
+        if (!$this->errorHandler->validateUserExists($originalUser)) {
+            return false;
+        }
+
+        // for validation
+        $newUserData = [
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email' => $email,
+            'role' => $userType,
+            'address' => $address,
+            'contact_number' => $contactNumber
+        ];
+        
+        if (!$this->errorHandler->validateUserData($newUserData)) {
+            return false;
+        }
+        
+        if (!$this->errorHandler->validateChanges($originalUser, $newUserData)) {
+            return false;
+        }
+        
+        $this->conn->query("SET @success = 0");
+        
         $stmt = $this->conn->prepare("CALL UpdateUser(:id, :fname, :lname, :email, :type, :address, :contact, @success)");
         $stmt->bindParam(':id', $userId);
         $stmt->bindParam(':fname', $firstName);
@@ -48,12 +93,17 @@ class SuperAdminService {
         $stmt->bindParam(':address', $address);
         $stmt->bindParam(':contact', $contactNumber);
         $stmt->execute();
-
+        
+        // success status
         $result = $this->conn->query("SELECT @success AS success");
-        return $result->fetch(PDO::FETCH_ASSOC)['success'];
+        $success = $result->fetch(PDO::FETCH_ASSOC)['success'];
+        
+        return $success;
     }
 
     public function deleteUser($userId) {
+        $this->conn->query("SET @success = 0");
+        
         $stmt = $this->conn->prepare("CALL DeleteUser(:id, @success)");
         $stmt->bindParam(':id', $userId);
         $stmt->execute();
@@ -62,19 +112,11 @@ class SuperAdminService {
         return $result->fetch(PDO::FETCH_ASSOC)['success'];
     }
     
-    // Add these new methods
-    public function getAppointmentsByStatus($status) {
-        $stmt = $this->conn->prepare("CALL GetAppointmentsByStatus(:status)");
-        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function getMedicationRequestsByStatus($status) {
-        $stmt = $this->conn->prepare("CALL GetMedicationRequestsByStatus(:status)");
-        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+ 
+    
+    // Get the error handler instance
+    public function getErrorHandler() {
+        return $this->errorHandler;
     }
 }
 ?>
