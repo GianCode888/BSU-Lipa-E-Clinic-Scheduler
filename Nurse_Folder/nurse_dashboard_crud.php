@@ -21,15 +21,6 @@ class NurseManager {
         return $result['count'];
     }
     
-    public function countTodayAppointments($nurse_id) {
-        $today = date('Y-m-d');
-        $stmt = $this->conn->prepare("CALL CountTodayAppointments(?, ?)");
-        $stmt->execute([$today, $nurse_id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        return $result['count'];
-    }
-    
     public function getRecentActivity($nurse_id) {
         $stmt = $this->conn->prepare("CALL GetRecentActivity()");
         $stmt->execute();
@@ -84,10 +75,6 @@ class NurseManager {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-
-
-
     // Insert patient log using stored procedure
     public function addPatientLog($student_name, $contact, $address, $nurse_name, $log_details) {
         $stmt = $this->conn->prepare("CALL AddPatientLog(?, ?, ?, ?, ?)");
@@ -106,12 +93,6 @@ class NurseManager {
             return false;  // No rows affected, meaning no log found with that ID
         }
     }
-    
-    
-    
-    
-    
-
     
     public function dispenseMedication($request_id, $nurse_id, $notes = '') {
         try {

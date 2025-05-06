@@ -25,7 +25,6 @@
             <ul>
                 <li><a href="../nurse_dashboard.php">Dashboard</a></li>
                 <li><a href="completed_medications.php">Completed Request</a></li>
-                <li><a href="patient_logs.php">Patient Notes</a></li>
                 <li><a href="../logout.php">Logout</a></li>
             </ul>
         </nav>

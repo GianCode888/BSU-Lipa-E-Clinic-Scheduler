@@ -55,23 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }     
     }     
     
-    // Handle patient log entries     
-    elseif (isset($_POST['action']) && $_POST['action'] == 'add_patient_log') {         
-        if (isset($_POST['student_id']) && isset($_POST['log_entry'])) {             
-            $student_id = $_POST['student_id'];             
-            $log_entry = $_POST['log_entry'];             
-            
-            $result = $nurseManager->addPatientLog($student_id, $nurse_id, $log_entry);             
-            
-            if ($result === true) {                 
-                $_SESSION['message'] = "Patient log entry added successfully.";             
-            } else {                 
-                $_SESSION['error'] = $result; // Error message from the method             
-            }         
-        } else {             
-            $_SESSION['error'] = "Missing required information for adding patient log.";         
-        }     
-    }     
+    // Handle patient log entries         
     
     // Unknown action     
     else {         
