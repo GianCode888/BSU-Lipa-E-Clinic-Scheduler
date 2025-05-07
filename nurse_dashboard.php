@@ -19,8 +19,7 @@ $nurse = $nurseManager->getNurseInfo($nurse_id);
 
 // Get dashboard data
 $pendingDispensing = $nurseManager->countPendingDispensing();
-$todayAppointments = $nurseManager->countTodayAppointments($nurse_id);
-$recentActivity = $nurseManager->getRecentActivity($nurse_id);
+
 ?>
 
 <!DOCTYPE html>
@@ -37,9 +36,9 @@ $recentActivity = $nurseManager->getRecentActivity($nurse_id);
         <p>Welcome, Nurse <?php echo htmlspecialchars($nurse['first_name'] . ' ' . $nurse['last_name']); ?></p>
         <nav>
             <ul>
-                <li><a href="nurse_dashboard.php">Dashboard</a></li>
-                <li><a href="Nurse_Folder/completed_medications.php">Completed Medications</a></li>
-                <li><a href="patient_logs.php">Patient Logs</a></li>
+                <li><a href="Nurse_Folder/patient_log.html">Patient Logs</a></li>
+                <li><a href="Nurse_Folder/approved_request_list.php">Approved List</a></li>
+                <li><a href="Nurse_Folder/view_completed_logs.php">View Completed Logs</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </nav>
@@ -71,61 +70,8 @@ $recentActivity = $nurseManager->getRecentActivity($nurse_id);
                 <div class="card">
                     <h3>Pending Dispensing</h3>
                     <p class="count"><?php echo $pendingDispensing; ?></p>
-                    <a href="Nurse_Folder/medication_requests.php" class="btn">View Requests</a>
+                    <a href="Nurse_Folder/view_medication_requests.php" class="btn">View Requests</a>
                 </div>
-                
-                <div class="card">
-                    <h3>Today's Appointments</h3>
-                    <p class="count"><?php echo $todayAppointments; ?></p>
-                    <a href="appointments.php" class="btn">View Appointments</a>
-                </div>
-            </div>
-        </section>
-        
-        <section class="recent-activity">
-            <h2>Recent Activity</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (count($recentActivity) > 0): ?>
-                        <?php foreach ($recentActivity as $activity): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($activity['first_name'] . ' ' . $activity['last_name']); ?></td>
-                                <td><?php echo htmlspecialchars($activity['reason']); ?></td>
-                                <td><?php echo ucfirst(htmlspecialchars($activity['status'])); ?></td>
-                                <td><?php echo date('M d, Y H:i', strtotime($activity['appointment_date'])); ?></td>
-                                <td>
-                                    <?php if ($activity['status'] == 'pending'): ?>
-                                        <form method="POST" action="nurse_dashboard_process.php">
-                                            <input type="hidden" name="action" value="update_appointment">
-                                            <input type="hidden" name="appointment_id" value="<?php echo $activity['appointment_id']; ?>">
-                                            <select name="new_status">
-                                                <option value="approved">Approve</option>
-                                                <option value="rejected">Reject</option>
-                                            </select>
-                                            <button type="submit">Update</button>
-                                        </form>
-                                    <?php endif; ?>
-                                    <a href="view_appointment.php?id=<?php echo $activity['appointment_id']; ?>" class="btn-small">View</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5">No recent appointments found</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </section>
     </main>
     
     <footer>

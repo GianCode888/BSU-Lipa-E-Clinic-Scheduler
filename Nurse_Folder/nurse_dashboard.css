@@ -6,28 +6,54 @@
     font-family: Arial, sans-serif;
 }
 
+/* Body styling with red theme */
 body {
-    background-color: #f5f7fb;
+    background-color: #fff0f0; /* Light red background */
+    background-image: url('../Images/qtpieees.jpg'); /* Keeping the original background image */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
-/* Header styling */
-header {
+/* Red-tinted overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    background-color: #4a76e8;
+    height: 100%;
+    background-color: rgba(255, 220, 220, 0.7); /* Red-tinted overlay */
+    z-index: 0;
+}
+
+/* Ensure content is above the overlay */
+main, header, footer {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+}
+
+/* Header styling - deeper red */
+header {
+    background-color: rgba(220, 0, 0, 0.9); /* Deeper red with transparency */
     color: white;
     text-align: center;
     padding: 1.5rem 0;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(150, 0, 0, 0.3); /* Red-tinted shadow */
 }
 
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 3px rgba(100, 0, 0, 0.5); /* Red-tinted shadow */
 }
 
 header p {
@@ -55,11 +81,12 @@ header nav ul li a {
     font-weight: 500;
     padding: 0.5rem 1rem;
     border-radius: 4px;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
 }
 
 header nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 150, 150, 0.4); /* Lighter red hover */
+    transform: translateY(-2px);
 }
 
 /* Main content area */
@@ -75,6 +102,12 @@ main {
     margin-bottom: 2rem;
 }
 
+.dashboard-summary h2 {
+    color: #c00000; /* Dark red heading */
+    border-bottom: 2px solid #ff8080; /* Light red border */
+    padding-bottom: 0.5rem;
+}
+
 .dashboard-cards {
     display: flex;
     flex-wrap: wrap;
@@ -83,17 +116,26 @@ main {
 }
 
 .card {
-    background-color: white;
-    border-radius: 8px;
+    background-color: rgba(255, 245, 245, 0.9); /* Very light red background */
+    border-left: 4px solid #ff0000; /* Red left border accent */
+    border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(200, 0, 0, 0.1); /* Red-tinted shadow */
     flex: 1;
     min-width: 250px;
     text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(200, 0, 0, 0.2); /* Enhanced red shadow on hover */
+    border-left: 4px solid #cc0000; /* Darker red border on hover */
 }
 
 .card h3 {
-    color: #4a76e8;
+    color: #cc0000; /* Deep red heading */
     margin-bottom: 1rem;
 }
 
@@ -101,29 +143,40 @@ main {
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    color: #333;
+    color: #b00000; /* Red count numbers */
 }
 
 .btn {
     display: inline-block;
-    background-color: #4a76e8;
+    background-color: #ff0000; /* Bright red buttons */
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
     text-decoration: none;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
+    font-weight: 600;
+    border: none;
 }
 
 .btn:hover {
-    background-color: #3a66d8;
+    background-color: #cc0000; /* Darker red for hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3); /* Red shadow */
 }
 
 /* Table styling for recent activity */
 .recent-activity {
-    background-color: white;
-    border-radius: 8px;
+    background-color: rgba(255, 245, 245, 0.9); /* Very light red */
+    border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(200, 0, 0, 0.1); /* Red shadow */
+    backdrop-filter: blur(5px);
+}
+
+.recent-activity h2 {
+    color: #c00000; /* Dark red heading */
+    border-bottom: 2px solid #ff8080; /* Light red border */
+    padding-bottom: 0.5rem;
 }
 
 table {
@@ -135,37 +188,74 @@ table {
 th, td {
     padding: 0.75rem;
     text-align: left;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ffdddd; /* Light red border */
 }
 
 th {
-    background-color: #f7f9fc;
-    color: #4a76e8;
+    background-color: rgba(255, 230, 230, 0.8); /* Very light red header */
+    color: #b00000; /* Dark red text */
     font-weight: 600;
 }
 
 tr:hover {
-    background-color: #f7f9fc;
+    background-color: rgba(255, 235, 235, 0.9); /* Lighter red hover */
+}
+
+/* Priority indicators for tables */
+.priority-high {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #ff6666;
+}
+
+.priority-low {
+    color: #ffaaaa;
 }
 
 /* Footer styling */
 footer {
-    width: 100%;
-    background-color: #4a76e8;
+    background-color: rgba(220, 0, 0, 0.9); /* Deeper red with transparency */
     color: white;
     text-align: center;
     padding: 1rem 0;
     margin-top: 2rem;
+    box-shadow: 0 -4px 12px rgba(150, 0, 0, 0.2); /* Red shadow */
 }
 
 /* Error message styling */
 .error-message {
-    background-color: #ffeeee;
-    color: #d32f2f;
+    background-color: rgba(255, 220, 220, 0.9); /* Light red background */
+    color: #b00000; /* Dark red text */
     padding: 0.75rem;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 1rem;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(211, 47, 47, 0.2);
+    border-left: 4px solid #ff0000; /* Red accent */
+}
+
+/* Success message styling */
+.success-message {
+    background-color: rgba(220, 255, 220, 0.9);
+    color: #008800;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 120, 0, 0.2);
+    border-left: 4px solid #00cc00;
+}
+
+/* Red accent elements */
+.accent-red {
+    color: #cc0000;
+}
+
+.border-red {
+    border: 1px solid #ffaaaa;
 }
 
 /* Responsive adjustments */
