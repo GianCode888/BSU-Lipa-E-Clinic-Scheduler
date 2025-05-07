@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 include("../eclinic_database.php");
 include("nurse_dashboard_crud.php");
 
@@ -9,30 +8,24 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $nurse_id = $_SESSION['user_id'];
-
 $database = new DatabaseConnection();
 $nurseManager = new NurseManager($database->getConnect());
 
-// Get nurse information
 $nurse = $nurseManager->getNurseInfo($nurse_id);
-
-// Get dashboard data
 $approvedRequests = $nurseManager->student_appointment_request();
 
-// Handle delete request
 if (isset($_GET['request_id']) && isset($_GET['user_id'])) {
     $log_id = $_GET['request_id'];
     $user_id = $_GET['user_id'];
 
-    if ($nurseManager->deleteCompletedRequest($log_id, $user_id)) {
+    if ($nurseManager->deleteCompletedLogs($log_id, $user_id)) {
         echo "<script>alert('Request deleted successfully!'); window.location.href='view_completed_logs.php';</script>";
     } else {
         echo "<script>alert('Failed to delete request.');</script>";
     }
 }
 
-// Fetch completed logs
-$completedLogs = $nurseManager->getCompletedRequests();
+$completedLogs = $nurseManager->getCompletedLogs();
 ?>
 
 <!DOCTYPE html>
@@ -40,12 +33,9 @@ $completedLogs = $nurseManager->getCompletedRequests();
 <head>
     <meta charset="UTF-8">
     <title>Student Appointment and Medication Requests</title>
-
-    <!-- DataTables CSS & JS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
     <script>
         $(document).ready(function() {
             $('#requestsTable').DataTable();
@@ -73,8 +63,8 @@ $completedLogs = $nurseManager->getCompletedRequests();
         </thead>
         <tbody>
             <?php 
-            if ($approvedRequests && $approvedRequests->rowCount() > 0) {
-                while ($row = $approvedRequests->fetch(PDO::FETCH_ASSOC)) { 
+            if (!empty($approvedRequests)) {
+                foreach ($approvedRequests as $row) {
                     $status = strtolower(trim($row['status']));
             ?>
                 <tr>

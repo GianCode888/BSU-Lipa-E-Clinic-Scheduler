@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once '../eclinic_database.php'; // Include your database connection
-require_once 'nurse_dashboard_crud.php'; // Include the NurseManager class
+require_once '../eclinic_database.php';
+require_once 'nurse_dashboard_crud.php';
 
 if (!isset($_SESSION['user_id'])) {
     die("Unauthorized access. Please log in.");
@@ -14,10 +14,8 @@ $database = new DatabaseConnection();
 $conn = $database->getConnect();
 $nurseManager = new NurseManager($conn);
 
-// Fetch all pending requests (appointments and medication)
-$allRequests = $nurseManager->student_appointment_request()->fetchAll(PDO::FETCH_ASSOC);
+$allRequests = $nurseManager->student_appointment_request();
 
-// Check for delete action
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete_appointment_id'])) {
         $appointment_id = $_POST['delete_appointment_id'];
@@ -27,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nurseManager->delete_medication($medication_id);
     }
 
-    // Redirect to avoid resubmission of form
     header("Location: view_medication_requests.php");
     exit();
 }
@@ -59,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <tbody>
         <?php
         foreach ($allRequests as $row) {
-            // Display the appropriate data based on the request type (Appointment or Medication)
             if ($row['request_type'] === 'Appointment') {
                 $requestType = "Appointment";
                 $details = "Reason: " . htmlspecialchars($row['reason']) . ", Time: " . htmlspecialchars($row['appointment_time']);
@@ -74,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id = $row['request_id'];
             }
 
-            // Render a table row
             echo "<tr>
                     <td>" . $requestType . "</td>
                     <td>" . $details . "</td>

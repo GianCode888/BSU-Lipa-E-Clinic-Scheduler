@@ -6,7 +6,6 @@ $database = new DatabaseConnection();
 $db = $database->getConnect();
 $nurseManager = new NurseManager($db);
 
-// Handle delete request
 if (isset($_GET['id'])) {
     $log_id = $_GET['id'];
 
@@ -17,10 +16,8 @@ if (isset($_GET['id'])) {
     }
 }
 
-// Fetch completed logs
 $completedLogs = $nurseManager->getCompletedLogs();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +81,7 @@ $completedLogs = $nurseManager->getCompletedLogs();
     </tbody>
 </table>
 <form method="POST">
-<a href="../nurse_dashboard.php" class="btn">Back to Dashboard</a>
+    <a href="../nurse_dashboard.php" class="btn">Back to Dashboard</a>
 </form>
 
 </body>

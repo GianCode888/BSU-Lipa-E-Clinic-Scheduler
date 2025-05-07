@@ -6,7 +6,6 @@ $database = new DatabaseConnection();
 $db = $database->getConnect();
 $nurseManager = new NurseManager($db);
 
-// Handle delete request
 if (isset($_GET['id'])) {
     $log_id = $_GET['id'];
 

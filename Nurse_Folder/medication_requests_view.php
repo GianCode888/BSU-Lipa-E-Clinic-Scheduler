@@ -6,15 +6,12 @@ $nurse_id = $_SESSION['user_id'];
 $database = new DatabaseConnection();
 $nurseManager = new NurseManager($database->getConnect());
 
-// Get nurse information
-
 $nurseManager = new NurseManager($pdo);
 $allRequests = $nurseManager->student_appointment_request();
 
 foreach ($allRequests as $request) {
     echo $request['request_type'] . ' - ' . $request['student_name'] . ' - ' . $request['status'] . '<br>';
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -28,11 +25,7 @@ foreach ($allRequests as $request) {
     <script>
         function toggleForm(formId) {
             const form = document.getElementById(formId);
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
     </script>
 </head>
@@ -47,4 +40,5 @@ foreach ($allRequests as $request) {
             </ul>
         </nav>
     </header>
-    
+</body>
+</html>

@@ -6,7 +6,6 @@ $database = new DatabaseConnection();
 $db = $database->getConnect();
 $nurseManager = new NurseManager($db);
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $student_name = $_POST['student_name'];
     $contact = $_POST['contact'];
@@ -20,8 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<script>alert('Failed to add log.');</script>";
     } 
 }
-// Fetch completed logs
+
 $completedLogs = $nurseManager->getCompletedLogs();
-
-
 ?>
