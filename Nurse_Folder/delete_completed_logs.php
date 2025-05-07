@@ -8,9 +8,9 @@ $nurseManager = new NurseManager($db);
 
 // Handle delete request
 if (isset($_GET['id'])) {
-    $user_id = $_GET['id'];
+    $log_id = $_GET['id'];
 
-    if ($nurseManager->deleteCompletedRequest($log_id, $user_id)) {
+    if ($nurseManager->deleteCompletedLogs($log_id)) {
         echo "<script>alert('Request deleted successfully!'); window.location.href='view_completed_logs.php';</script>";
     } else {
         echo "<script>alert('Failed to delete request.');</script>";

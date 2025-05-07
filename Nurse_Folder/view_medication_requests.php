@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-include("../eclinic_database.php");
-include("nurse_dashboard_crud.php");
+require_once '../eclinic_database.php'; // Include your database connection
+require_once 'nurse_dashboard_crud.php'; // Include the NurseManager class
 
 if (!isset($_SESSION['user_id'])) {
     die("Unauthorized access. Please log in.");
@@ -11,103 +11,95 @@ if (!isset($_SESSION['user_id'])) {
 $nurse_id = $_SESSION['user_id'];
 
 $database = new DatabaseConnection();
-$nurseManager = new NurseManager($database->getConnect());
+$conn = $database->getConnect();
+$nurseManager = new NurseManager($conn);
 
-// Get nurse information
-$nurse = $nurseManager->getNurseInfo($nurse_id);
+// Fetch all pending requests (appointments and medication)
+$allRequests = $nurseManager->student_appointment_request()->fetchAll(PDO::FETCH_ASSOC);
 
-// Get dashboard data
-$approvedRequests = $nurseManager->student_appointment_request();
-
-// Handle delete request
-if (isset($_GET['id'])) {
-    $user_id = $_GET['id'];
-
-    if ($nurseManager->deleteCompletedRequest($log_id, $user_id)) {
-        echo "<script>alert('Request deleted successfully!'); window.location.href='view_completed_logs.php';</script>";
-    } else {
-        echo "<script>alert('Failed to delete request.');</script>";
+// Check for delete action
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['delete_appointment_id'])) {
+        $appointment_id = $_POST['delete_appointment_id'];
+        $nurseManager->delete_appointment($appointment_id);
+    } elseif (isset($_POST['delete_medication_id'])) {
+        $medication_id = $_POST['delete_medication_id'];
+        $nurseManager->delete_medication($medication_id);
     }
+
+    // Redirect to avoid resubmission of form
+    header("Location: view_medication_requests.php");
+    exit();
 }
-
-// Fetch completed logs
-$completedLogs = $nurseManager->getCompletedRequests();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Appointment and Medication Requests</title>
-
-    <!-- DataTables CSS & JS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Requests</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#requestsTable').DataTable();
-        });
-    </script>
 </head>
 <body>
-    <button type="button" onclick="window.location.href='../nurse_dashboard.php'">Home</button>
+<button type="button" onclick="window.location.href='../nurse_dashboard.php'">Home</button>
 
-    <h2>Student Requests (Appointments & Medications)</h2>
+<h3>Pending Requests</h3>
 
-    <table id="requestsTable" class="display">
-        <thead>
-            <tr>
-                <th>Request ID</th>
-                <th>Student Name</th>
-                <th>Request Type</th>
-                <th>Request Date</th>
-                <th>Appointment Time</th>
-                <th>Status</th>
-                <th>Reason</th>
-                <th>Created At</th>
-                <th>Request</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-            if ($approvedRequests && $approvedRequests->rowCount() > 0) {
-                while ($row = $approvedRequests->fetch(PDO::FETCH_ASSOC)) { 
-                    $status = strtolower(trim($row['status']));
-            ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['request_id']) ?></td>
-                    <td><?= htmlspecialchars($row['student_name']) ?></td>
-                    <td><?= htmlspecialchars($row['request_type']) ?></td>
-                    <td><?= htmlspecialchars($row['appointment_date']) ?></td>
-                    <td><?= $row['appointment_time'] ?? '-' ?></td>
-                    <td><?= ucfirst(htmlspecialchars($status)) ?></td>
-                    <td><?= htmlspecialchars($row['reason']) ?></td>
-                    <td><?= htmlspecialchars($row['created_at']) ?></td>
-                    <td>
-                        <?php if ($status === 'pending'): ?>
-                                <input type="hidden" name="request_id" value="<?= $row['request_id'] ?>">
-                                <input type="hidden" name="request_type" value="<?= $row['request_type'] ?>">
-                                <input type="hidden" name="action" value="decline">
-                                <td><a href="delete_medication_requests.php?id=<?= $user['id'] ?>" class="btn-delete">Delete</a></td>
-                            </form>
-                        <?php else: ?>
-
-                            <span>Already <?= ucfirst(htmlspecialchars($status)) ?></span>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php 
-                }
+<table id="requestsTable" class="display">
+    <thead>
+        <tr>
+            <th>Request Type</th>
+            <th>Details</th>
+            <th>Request Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        foreach ($allRequests as $row) {
+            // Display the appropriate data based on the request type (Appointment or Medication)
+            if ($row['request_type'] === 'Appointment') {
+                $requestType = "Appointment";
+                $details = "Reason: " . htmlspecialchars($row['reason']) . ", Time: " . htmlspecialchars($row['appointment_time']);
+                $requestDate = htmlspecialchars($row['appointment_date']);
+                $status = ucfirst(htmlspecialchars($row['status']));
+                $id = $row['request_id'];
             } else {
-            ?>
-                <tr>
-                    <td colspan="9" style="text-align:center;">No student requests found.</td>
-                </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+                $requestType = "Medication";
+                $details = "Medication: " . htmlspecialchars($row['reason']);
+                $requestDate = htmlspecialchars($row['appointment_date']);
+                $status = ucfirst(htmlspecialchars($row['status']));
+                $id = $row['request_id'];
+            }
+
+            // Render a table row
+            echo "<tr>
+                    <td>" . $requestType . "</td>
+                    <td>" . $details . "</td>
+                    <td>" . $requestDate . "</td>
+                    <td>" . $status . "</td>
+                    <td>
+                        <form method='POST' action='view_medication_requests.php' style='display:inline-block;'>
+                            <input type='hidden' name='" . ($requestType == 'Medication' ? 'delete_medication_id' : 'delete_appointment_id') . "' value='" . $id . "'>
+                            <button type='submit' name='delete' onclick='return confirm(\"Are you sure you want to delete this " . strtolower($requestType) . " request?\")'>Delete</button>
+                        </form>
+                    </td>
+                </tr>";
+        }
+        ?>
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#requestsTable').DataTable();
+    });
+</script>
+
 </body>
 </html>

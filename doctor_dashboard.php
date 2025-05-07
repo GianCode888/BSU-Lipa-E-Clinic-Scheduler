@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_id']) || $user_role != 'doctor') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
-    <link rel="stylesheet" href="../CSS/student_dashboard.css">
+    <link rel="stylesheet" href="../CSS/doctor_dashboard.css">
 </head>
 <body>
 
@@ -30,7 +30,9 @@ if (!isset($_SESSION['user_id']) || $user_role != 'doctor') {
         <ul>
             <li><a href="Doctor_Folder/student_request.php">View Student Request</a></li>
             <li><a href="Doctor_Folder/approved_request.php">View Approved Request</a></li>
-            
+            <li><a href="Doctor_Folder/prescription.php">Prescription Orders</a></li>
+            <li><a href="Doctor_Folder/availability_form.html">Set Availability</a></li>
+            <li><a href="Doctor_Folder/view_schedule.php">View My Schedule</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </nav>

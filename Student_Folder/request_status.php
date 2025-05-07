@@ -73,4 +73,8 @@ $requests = $student->view_requestStatus($student_id);
         });
     </script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> fba6404122efef9fc229bfa4444331477bf15ec4

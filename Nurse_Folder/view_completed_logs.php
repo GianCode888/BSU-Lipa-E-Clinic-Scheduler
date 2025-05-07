@@ -10,7 +10,7 @@ $nurseManager = new NurseManager($db);
 if (isset($_GET['id'])) {
     $log_id = $_GET['id'];
 
-    if ($nurseManager->deleteCompletedRequest($log_id)) {
+    if ($nurseManager->deleteCompletedLogs($log_id)) {
         echo "<script>alert('Request deleted successfully!'); window.location.href='view_completed_logs.php';</script>";
     } else {
         echo "<script>alert('Failed to delete request.');</script>";
@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
 }
 
 // Fetch completed logs
-$completedLogs = $nurseManager->getCompletedRequests();
+$completedLogs = $nurseManager->getCompletedLogs();
 ?>
 
 
@@ -85,7 +85,6 @@ $completedLogs = $nurseManager->getCompletedRequests();
 </table>
 <form method="POST">
 <a href="../nurse_dashboard.php" class="btn">Back to Dashboard</a>
-<link rel="stylesheet" href="Nurse_Folder/../patient_log.css">
 </form>
 
 </body>

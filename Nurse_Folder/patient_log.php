@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } 
 }
 // Fetch completed logs
-$completedLogs = $nurseManager->getCompletedRequests();
+$completedLogs = $nurseManager->getCompletedLogs();
 
 
 ?>

@@ -1,70 +1,112 @@
 <?php
-include '../Nurse_Folder/nurse_dashboard_crud.php';
-require_once '../eclinic_database.php';
+session_start();
+
+include("../eclinic_database.php");
+include("nurse_dashboard_crud.php");
+
+if (!isset($_SESSION['user_id'])) {
+    die("Unauthorized access. Please log in.");
+}
+
+$nurse_id = $_SESSION['user_id'];
 
 $database = new DatabaseConnection();
-$conn = $database->getConnect();
-$nurse = new NurseManager($conn);
+$nurseManager = new NurseManager($database->getConnect());
 
-$approved_requests = $nurse->get_all_approved_requests();
-$pendingDispensing = $nurse->countPendingDispensing(); // Corrected variable name
+// Get nurse information
+$nurse = $nurseManager->getNurseInfo($nurse_id);
+
+// Get dashboard data
+$approvedRequests = $nurseManager->student_appointment_request();
+
+// Handle delete request
+if (isset($_GET['request_id']) && isset($_GET['user_id'])) {
+    $log_id = $_GET['request_id'];
+    $user_id = $_GET['user_id'];
+
+    if ($nurseManager->deleteCompletedRequest($log_id, $user_id)) {
+        echo "<script>alert('Request deleted successfully!'); window.location.href='view_completed_logs.php';</script>";
+    } else {
+        echo "<script>alert('Failed to delete request.');</script>";
+    }
+}
+
+// Fetch completed logs
+$completedLogs = $nurseManager->getCompletedRequests();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Approved Requests</title>
+    <title>Student Appointment and Medication Requests</title>
+
+    <!-- DataTables CSS & JS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            $('#approvedRequestsTable').DataTable();
+            $('#requestsTable').DataTable();
         });
-
-        function toggleForm() {
-            const form = document.getElementById('approvalForm');
-            form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
-        }
     </script>
 </head>
 <body>
-    <button type="button" onclick="history.back()">Home</button>
+    <button type="button" onclick="window.location.href='../nurse_dashboard.php'">Home</button>
 
-    <h2>All Approved Requests</h2>
+    <h2>Student Requests (Appointments & Medications)</h2>
 
-    <?php if (!empty($approved_requests)): ?>
-        <table id="approvedRequestsTable" class="display">
-            <thead>
+    <table id="requestsTable" class="display">
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Student Name</th>
+                <th>Request Type</th>
+                <th>Request Date</th>
+                <th>Appointment Time</th>
+                <th>Status</th>
+                <th>Reason</th>
+                <th>Created At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            if ($approvedRequests && $approvedRequests->rowCount() > 0) {
+                while ($row = $approvedRequests->fetch(PDO::FETCH_ASSOC)) { 
+                    $status = strtolower(trim($row['status']));
+            ?>
                 <tr>
-                    <th>Request Type</th>
-                    <th>Student Name</th>
-                    <th>Request Date</th>
-                    <th>Appointment Date</th>
-                    <th>Appointment Time</th>
-                    <th>Description</th>
-                    <th>Approval Notes</th>
+                    <td><?= htmlspecialchars($row['request_id']) ?></td>
+                    <td><?= htmlspecialchars($row['student_name']) ?></td>
+                    <td><?= htmlspecialchars($row['request_type']) ?></td>
+                    <td><?= htmlspecialchars($row['appointment_date']) ?></td>
+                    <td><?= $row['appointment_time'] ?? '-' ?></td>
+                    <td><?= ucfirst(htmlspecialchars($status)) ?></td>
+                    <td><?= htmlspecialchars($row['reason']) ?></td>
+                    <td><?= htmlspecialchars($row['created_at']) ?></td>
+                    <td>
+                        <?php if ($status === 'pending'): ?>
+                            <form method="GET" action="">
+                                <input type="hidden" name="request_id" value="<?= $row['request_id'] ?>">
+                                <input type="hidden" name="user_id" value="<?= $nurse_id ?>">
+                                <button type="submit" onclick="return confirm('Are you sure you want to delete this request?')">Delete</button>
+                            </form>
+                        <?php else: ?>
+                            <span>Already <?= ucfirst(htmlspecialchars($status)) ?></span>
+                        <?php endif; ?>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($approved_requests as $request): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($request['request_type']); ?></td>
-                        <td><?php echo htmlspecialchars($request['student_name']); ?></td>
-                        <td><?php echo htmlspecialchars($request['request_date']); ?></td>
-                        <td><?php echo htmlspecialchars($request['appointment_date'] ?? 'N/A'); ?></td>
-                        <td><?php echo htmlspecialchars($request['appointment_time'] ?? 'N/A'); ?></td>
-                        <td><?php echo htmlspecialchars($request['description']); ?></td>
-                        <td><?php echo htmlspecialchars($request['approval_notes'] ?? 'No notes provided'); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p>No approved requests found.</p>
-    <?php endif; ?>
-
+            <?php 
+                }
+            } else {
+            ?>
+                <tr>
+                    <td colspan="9" style="text-align:center;">No student requests found.</td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 </body>
 </html>
