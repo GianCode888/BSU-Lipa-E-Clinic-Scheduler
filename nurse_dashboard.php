@@ -68,7 +68,7 @@ $pendingDispensing = $nurseManager->countPendingDispensing();
             <h2>Dashboard Summary</h2>
             <div class="dashboard-cards">
                 <div class="card">
-                    <h3>Pending Dispensing</h3>
+                    <h3>Pending Request Count</h3>
                     <p class="count"><?php echo $pendingDispensing; ?></p>
                     <a href="Nurse_Folder/view_medication_requests.php" class="btn">View Requests</a>
                 </div>

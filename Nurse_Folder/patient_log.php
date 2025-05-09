@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $log_details = $_POST['log_details'];
 
     if ($nurseManager->addPatientLog($student_name, $contact, $address, $nurse_name, $log_details)) {
-        echo "<script>alert('Log added successfully!'); window.location.href='../nurse_dashboard.php';</script>";
+        echo "<script>alert('Log added successfully!'); window.location.href='patient_log.html';</script>";
     } else {
         echo "<script>alert('Failed to add log.');</script>";
     } 
