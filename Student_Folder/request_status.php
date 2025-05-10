@@ -22,6 +22,7 @@ $requests = $student->view_requestStatus($student_id);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Status</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/request_status.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
@@ -73,8 +74,4 @@ $requests = $student->view_requestStatus($student_id);
         });
     </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> fba6404122efef9fc229bfa4444331477bf15ec4

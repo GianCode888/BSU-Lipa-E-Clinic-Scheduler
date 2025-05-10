@@ -16,6 +16,7 @@ $appointments = $student->view_medicationrequest($student_id);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Medication Requests</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/view_medication.css">
 </head>
 <body>
 <button type="button" onclick="window.location.href='../student_dashboard.php'">Home</button>

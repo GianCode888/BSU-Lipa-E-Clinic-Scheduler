@@ -7,6 +7,7 @@ $user_id = $_POST['user_id'] ?? null;
 <head>
     <meta charset="UTF-8">
     <title>Prescription Form</title>
+    <link rel="stylesheet" href="../CSS/prescription_form.css">
 </head>
 <body>
     <h2>Prescription Form</h2>

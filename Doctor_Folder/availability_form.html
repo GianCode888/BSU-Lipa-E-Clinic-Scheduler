@@ -3,28 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <title>Doctor Availability Form</title>
+  <link rel="stylesheet" href="../CSS/availability_form.css">
 </head>
 <body>
-  <button type="button" onclick="window.location.href='../doctor_dashboard.php'">Home</button>
-  
-  <h2>Doctor Availability Form</h2>
-  <form action="doctor_serverside.php" method="POST">
-    <label for="doctor_name">Doctor Name:</label>
-    <input type="text" id="doctor_name" name="doctor_name" required><br><br>
+  <div class="container">
+    <button type="button" onclick="window.location.href='../doctor_dashboard.php'">Home</button>
 
-    <label for="available_date">Available Date:</label>
-    <input type="date" id="available_date" name="available_date" required><br><br>
+    <h2>Doctor Availability Form</h2>
+    <form action="doctor_serverside.php" method="POST">
+      <label for="doctor_name">Doctor Name:</label>
+      <input type="text" id="doctor_name" name="doctor_name" required><br><br>
 
-    <label for="start_time">Start Time:</label>
-    <input type="time" id="start_time" name="start_time" required><br><br>
+      <label for="available_date">Available Date:</label>
+      <input type="date" id="available_date" name="available_date" required><br><br>
 
-    <label for="end_time">End Time:</label>
-    <input type="time" id="end_time" name="end_time" required><br><br>
+      <label for="start_time">Start Time:</label>
+      <input type="time" id="start_time" name="start_time" required><br><br>
 
-    <label for="notes">Additional Notes (optional):</label><br>
-    <textarea id="notes" name="notes" rows="4" cols="40"></textarea><br><br>
+      <label for="end_time">End Time:</label>
+      <input type="time" id="end_time" name="end_time" required><br><br>
 
-    <button type="submit">Submit Availability</button>
-  </form>
+      <label for="notes">Additional Notes (optional):</label><br>
+      <textarea id="notes" name="notes" rows="4" cols="40"></textarea><br><br>
+
+      <button type="submit">Submit Availability</button>
+    </form>
+  </div>
 </body>
 </html>

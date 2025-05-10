@@ -17,6 +17,7 @@ $prescribed_user_ids = array_column($students_with_prescriptions, 'user_id');
     <meta charset="UTF-8">
     <title>Prescription Orders</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/prescription.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     

@@ -24,33 +24,36 @@ if (!$request_details) {
 <head>
     <meta charset="UTF-8">
     <title>Add Approval Notes</title>
+    <link rel="stylesheet" href="../CSS/note_approval.css">
 </head>
 <body>
 
-    <h2>Add Approval Notes</h2>
+    <div class="container">
+        <h2>Add Approval Notes</h2>
 
-    <h3>Student Details</h3>
-    <p><strong>Student Name:</strong> <?php echo htmlspecialchars($request_details['student_name']); ?></p>
+        <h3>Student Details</h3>
+        <p><strong>Student Name:</strong> <?php echo htmlspecialchars($request_details['student_name']); ?></p>
 
-    <?php if ($request_type === 'Appointment'): ?>
-        <p><strong>Appointment Date:</strong> <?php echo htmlspecialchars($request_details['appointment_date']); ?></p>
-        <p><strong>Appointment Time:</strong> <?php echo htmlspecialchars($request_details['appointment_time']); ?></p>
-        <p><strong>Reason:</strong> <?php echo htmlspecialchars($request_details['reason']); ?></p>
-    <?php elseif ($request_type === 'Medication'): ?>
-        <p><strong>Request Date:</strong> <?php echo htmlspecialchars($request_details['request_date']); ?></p>
-        <p><strong>Medication Requested:</strong> <?php echo htmlspecialchars($request_details['medication']); ?></p>
-    <?php endif; ?>
+        <?php if ($request_type === 'Appointment'): ?>
+            <p><strong>Appointment Date:</strong> <?php echo htmlspecialchars($request_details['appointment_date']); ?></p>
+            <p><strong>Appointment Time:</strong> <?php echo htmlspecialchars($request_details['appointment_time']); ?></p>
+            <p><strong>Reason:</strong> <?php echo htmlspecialchars($request_details['reason']); ?></p>
+        <?php elseif ($request_type === 'Medication'): ?>
+            <p><strong>Request Date:</strong> <?php echo htmlspecialchars($request_details['request_date']); ?></p>
+            <p><strong>Medication Requested:</strong> <?php echo htmlspecialchars($request_details['medication']); ?></p>
+        <?php endif; ?>
 
-    <form method="POST" action="doctor_serverside.php">
-        <label for="approval_notes">Approval Notes:</label><br>
-        <textarea name="approval_notes" id="approval_notes" rows="4" cols="50" required></textarea><br><br>
+        <form method="POST" action="doctor_serverside.php">
+            <label for="approval_notes">Approval Notes:</label><br>
+            <textarea name="approval_notes" id="approval_notes" rows="4" cols="50" required></textarea><br><br>
 
-        <input type="hidden" name="request_id" value="<?php echo htmlspecialchars($request_id); ?>">
-        <input type="hidden" name="request_type" value="<?php echo htmlspecialchars($request_type); ?>">
-        <input type="hidden" name="action" value="submit_approval_notes">
+            <input type="hidden" name="request_id" value="<?php echo htmlspecialchars($request_id); ?>">
+            <input type="hidden" name="request_type" value="<?php echo htmlspecialchars($request_type); ?>">
+            <input type="hidden" name="action" value="submit_approval_notes">
 
-        <button type="submit">Submit Approval Notes</button>
-    </form>
+            <button type="submit">Submit Approval Notes</button>
+        </form>
+    </div>
 
 </body>
 </html>

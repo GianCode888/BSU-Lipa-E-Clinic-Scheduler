@@ -15,6 +15,7 @@ $approved_requests = $doctor->get_all_approved_requests();
     <meta charset="UTF-8">
     <title>Approved Requests</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/approved_request.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
@@ -30,40 +31,44 @@ $approved_requests = $doctor->get_all_approved_requests();
     </script>
 </head>
 <body>
+
     <button type="button" onclick="history.back()">Home</button>
 
-    <h2>All Approved Requests</h2>
+    <div class="container">
+        <h2>All Approved Requests</h2>
 
-    <?php if (!empty($approved_requests)): ?>
-        <table id="approvedRequestsTable" class="display">
-            <thead>
-                <tr>
-                    <th>Request Type</th>
-                    <th>Student Name</th>
-                    <th>Request Date</th>
-                    <th>Appointment Date</th>
-                    <th>Appointment Time</th>
-                    <th>Description</th>
-                    <th>Approval Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($approved_requests as $request): ?>
+        <?php if (!empty($approved_requests)): ?>
+            <table id="approvedRequestsTable" class="display">
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($request['request_type']); ?></td>
-                        <td><?php echo htmlspecialchars($request['student_name']); ?></td>
-                        <td><?php echo htmlspecialchars($request['request_date']); ?></td>
-                        <td><?php echo htmlspecialchars($request['appointment_date'] ?? 'N/A'); ?></td>
-                        <td><?php echo htmlspecialchars($request['appointment_time'] ?? 'N/A'); ?></td>
-                        <td><?php echo htmlspecialchars($request['description']); ?></td>
-                        <td><?php echo htmlspecialchars($request['approval_notes'] ?? 'No notes provided'); ?></td>
+                        <th>Request Type</th>
+                        <th>Student Name</th>
+                        <th>Request Date</th>
+                        <th>Appointment Date</th>
+                        <th>Appointment Time</th>
+                        <th>Description</th>
+                        <th>Approval Notes</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p>No approved requests found.</p>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($approved_requests as $request): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($request['request_type']); ?></td>
+                            <td><?php echo htmlspecialchars($request['student_name']); ?></td>
+                            <td><?php echo htmlspecialchars($request['request_date']); ?></td>
+                            <td><?php echo htmlspecialchars($request['appointment_date'] ?? 'N/A'); ?></td>
+                            <td><?php echo htmlspecialchars($request['appointment_time'] ?? 'N/A'); ?></td>
+                            <td><?php echo htmlspecialchars($request['description']); ?></td>
+                            <td><?php echo htmlspecialchars($request['approval_notes'] ?? 'No notes provided'); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No approved requests found.</p>
+        <?php endif; ?>
+
+    </div>
 
 </body>
 </html>

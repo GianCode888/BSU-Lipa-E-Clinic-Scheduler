@@ -4,23 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Appointment Request</title>
+    <link rel="stylesheet" href="../CSS/appointment_request.css">
 </head>
 <body>
-    <button type="button" onclick="history.back()">Home</button>
+    <div class="container">
+        <button type="button" onclick="history.back()">Home</button>
 
-    <form method="POST" action="student_serverside.php">
-        <input type="hidden" name="request_type" value="appointment">
-        
-        <label>Date:</label>
-        <input type="date" id="appointment_date" name="appointment_date" required>
-        
-        <label>Time:</label>
-        <input type="time" id="appointment_time" name="appointment_time" required>
-        
-        <label>Reason:</label>
-        <textarea name="reason" id="reason" required></textarea>
-        
-        <button type="submit">Submit Request</button>
-    </form>
+        <form method="POST" action="student_serverside.php">
+            <input type="hidden" name="request_type" value="appointment">
+            
+            <label>Date:</label>
+            <input type="date" id="appointment_date" name="appointment_date" required>
+            
+            <label>Time:</label>
+            <input type="time" id="appointment_time" name="appointment_time" required>
+            
+            <label>Reason:</label>
+            <textarea name="reason" id="reason" required></textarea>
+            
+            <button type="submit">Submit Request</button>
+        </form>
+    </div>
 </body>
 </html>

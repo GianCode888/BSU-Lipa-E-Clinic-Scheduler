@@ -1,0 +1,129 @@
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+/* Main container for the form */
+.container {
+    width: 50%; /* Reduced container width */
+    margin: 0 auto;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 60px;
+    border: 1px solid #ccc;
+}
+
+/* Heading Style */
+h2 {
+    text-align: center;
+    color: #c1121f; /* Red */
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* Home Button Style */
+button[type="button"] {
+    background-color: #c1121f; /* Red color */
+    color: white;
+    font-size: 16px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-align: center;
+    display: block;
+    width: 150px;
+    transition: background-color 0.3s;
+}
+
+button[type="button"]:hover {
+    background-color: #900c1d; /* Darker red on hover */
+}
+
+/* Form styling */
+form {
+    display: grid;
+    grid-gap: 15px;
+}
+
+/* Input fields styling */
+input[type="text"],
+input[type="date"],
+input[type="time"],
+textarea {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+textarea:focus {
+    border-color: #c1121f;
+    outline: none;
+}
+
+/* Form label styling */
+label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Submit Button */
+button[type="submit"] {
+    background-color: #c1121f; /* Red color */
+    color: white;
+    font-size: 18px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #900c1d; /* Darker red on hover */
+}
+
+/* Additional notes styling */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Responsive Design for smaller screens */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 80%; /* Make container larger on smaller screens */
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    button[type="button"],
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}

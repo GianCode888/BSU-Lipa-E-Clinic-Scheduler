@@ -17,6 +17,7 @@ if (isset($_GET['available_date']) && $_GET['available_date'] !== '') {
     echo '<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">';
     echo '<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>';
     echo '<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>';
+    echo '<link rel="stylesheet" href="../CSS/availibility_day.css">';
 
     echo "<table id='availabilityTable' class='display'>
             <thead>

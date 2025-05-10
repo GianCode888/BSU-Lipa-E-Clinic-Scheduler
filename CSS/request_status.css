@@ -1,0 +1,115 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container for content */
+.container {
+    margin-top: 50px;
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Home Button Styling */
+button[type="button"] {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #ff4d4d;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+button[type="button"]:hover {
+    background-color: #cc0000;
+}
+
+/* Heading Style */
+h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Message Display */
+.message, .error-message {
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+
+.message {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.error-message {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+table th {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+table td {
+    background-color: #fff;
+}
+
+table td:hover {
+    background-color: #f7f7f7;
+}
+
+/* Table Header Styling */
+thead {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    table th, table td {
+        font-size: 0.9rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+}

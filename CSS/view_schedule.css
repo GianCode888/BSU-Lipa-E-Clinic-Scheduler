@@ -1,0 +1,98 @@
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+/* Heading Style */
+h1 {
+    text-align: center;
+    color: #c1121f; /* Red color */
+    font-size: 36px;
+    margin-top: 40px;
+    font-weight: 700;
+}
+
+/* Button Style */
+button[type="button"] {
+    background-color: #c1121f; /* Red color */
+    color: white;
+    font-size: 16px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 20px auto;
+    display: block;
+    width: 200px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+button[type="button"]:hover {
+    background-color: #900c1d; /* Darker red on hover */
+}
+
+/* Table Styling */
+table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.8); /* Transparent white background */
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header */
+th {
+    background-color: #c1121f; /* Red color */
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Table Data */
+td {
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Alternating Row Colors */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* No Schedule Message */
+p {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    table {
+        width: 90%; /* Make the table wider on smaller screens */
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    button[type="button"] {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}

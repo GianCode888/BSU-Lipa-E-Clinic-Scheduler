@@ -17,6 +17,7 @@ $schedule_data = $doctor->view_schedule($user_id);
     <title>View Schedule</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/view_schedule.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>

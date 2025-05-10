@@ -1,0 +1,134 @@
+/* Overall page styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+/* Button Styles */
+button,
+input[type="submit"] {
+    padding: 12px 20px;
+    background-color: #e60000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+button:focus,
+input[type="submit"]:focus {
+    outline: none;
+}
+
+/* Main Container Styles */
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+/* Left-side (Profile) */
+.left-side {
+    width: 48%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.left-side h3 {
+    color: #e60000;
+    margin-bottom: 20px;
+}
+
+.left-side p {
+    margin: 10px 0;
+}
+
+.left-side a {
+    text-decoration: none;
+}
+
+.left-side .btn-primary {
+    background-color: #e60000;
+}
+
+/* Right-side (Health Form) */
+.right-side {
+    width: 48%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Make the form inside the right side slightly transparent */
+.right-side form {
+    background: rgba(255, 255, 255, 0.8);  /* Form background with 80% opacity */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.right-side form label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.right-side input,
+.right-side textarea {
+    margin-top: 5px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.right-side input:focus,
+.right-side textarea:focus {
+    border: 1px solid #e60000;
+    box-shadow: 0 0 5px rgba(230, 0, 0, 0.5);
+}
+
+.right-side input[type="submit"] {
+    margin-top: 20px;
+    background-color: #e60000;
+}
+
+.right-side input[type="submit"]:hover {
+    background-color: #cc0000;
+}
+
+/* Card styling */
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .left-side,
+    .right-side {
+        width: 90%;
+        margin-bottom: 20px;
+    }
+}
