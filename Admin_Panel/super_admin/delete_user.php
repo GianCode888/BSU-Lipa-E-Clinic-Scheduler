@@ -14,11 +14,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $userId = $_GET['id'];
-
-// Initialize the service
 $adminService = new SuperAdminService();
-
-// Delete user
 $success = $adminService->deleteUser($userId);
 
 if ($success) {

@@ -73,7 +73,6 @@ for ($i = 0; $i < 5; $i++) {
     
     <div class="row mb-5">
         <div class="col-md-4">
-            <!-- Filter Schedule Card -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">Filter Schedule</h5>
@@ -103,7 +102,6 @@ for ($i = 0; $i < 5; $i++) {
                 </div>
             </div>
             
-            <!-- Stats Cards -->
             <div class="row">
                 <div class="col-md-6">
                     <div class="card bg-primary text-white mb-4">
@@ -126,7 +124,6 @@ for ($i = 0; $i < 5; $i++) {
         </div>
         
         <div class="col-md-8">
-            <!-- Availability Table Card -->
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -211,7 +208,7 @@ for ($i = 0; $i < 5; $i++) {
         </div>
     </div>
     
-    <!-- Detailed Doctor Availability Section - Centered and Compact -->
+
     <?php if (!$selectedUserId && count($doctorAvailability) > 0): ?>
     <div class="doctor-detail-containers">
         <div class="card mt-4">
@@ -257,7 +254,6 @@ for ($i = 0; $i < 5; $i++) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl, {
@@ -266,29 +262,22 @@ for ($i = 0; $i < 5; $i++) {
     })
     
     function exportToCSV() {
-        // Get the table
         const table = document.getElementById('availabilityTable');
         let csv = [];
         
-        // Get all rows
         const rows = table.querySelectorAll('tr');
-        
-        // Loop through rows
+
         for (let i = 0; i < rows.length; i++) {
             const row = [], cols = rows[i].querySelectorAll('td, th');
             
-            // Loop through columns
             for (let j = 0; j < cols.length; j++) {
-                // Get the text content and replace any commas with spaces
                 let data = cols[j].textContent.replace(/,/g, ' ');
-                // Wrap with quotes
                 row.push('"' + data + '"');
             }
             
             csv.push(row.join(','));
         }
         
-        // Combine into a single string with line breaks
         const csvString = csv.join('\n');
         
     }

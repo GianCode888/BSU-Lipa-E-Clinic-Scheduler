@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Check if user is logged in and has the correct role
 if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'medical_data_admin' && $_SESSION['role'] !== 'super_admin')) {
     header("Location: /login.php");
     exit();
@@ -10,9 +9,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'medical_data_admin' && 
 include '../admin_sidebar.php';
 require_once '../Admin_Functions/SuperAdminService.php';
 
-// Initialize the service
 $adminService = new SuperAdminService();
-
 $users = $adminService->getAllUsers();
 
 $successMessage = '';

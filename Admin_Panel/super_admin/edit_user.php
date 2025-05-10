@@ -8,7 +8,6 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'medical_data_admin' && 
 
 require_once '../Admin_Functions/SuperAdminService.php';
 
-// Initialize
 $adminService = new SuperAdminService();
 $errorHandler = $adminService->getErrorHandler();
 $validationErrors = [];
@@ -22,12 +21,10 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $userId = $_GET['id'];
 $user = $adminService->getUserById($userId);
 
-// If user not found
 if (!$user) {
     header("Location: manage_users.php");
     exit();
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 

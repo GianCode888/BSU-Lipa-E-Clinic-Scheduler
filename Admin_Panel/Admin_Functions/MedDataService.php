@@ -217,36 +217,73 @@ class MedDataService {
     }
     
 
+    public function getDoctorAvailability($userId) {
+        $stmt = $this->conn->prepare("CALL GetDoctorAvailability(?)");
+        $stmt->bindParam(1, $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getCombinedDoctorAvailability($weekStart, $weekEnd) {
-        $stmt = $this->conn->prepare("CALL GetCombinedDoctorAvailability(?, ?)");
+        $stmt = $this->conn->prepare("CALL GetDoctorAvailabilityByWeek(NULL, ?, ?)");
         $stmt->bindParam(1, $weekStart, PDO::PARAM_STR);
         $stmt->bindParam(2, $weekEnd, PDO::PARAM_STR);
         $stmt->execute();
         
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $availabilityData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-        // Organize the results by time slot and day
+        $timeSlots = [
+            '08:00:00' => '08:00 - 09:00',
+            '09:00:00' => '09:00 - 10:00',
+            '10:00:00' => '10:00 - 11:00',
+            '11:00:00' => '11:00 - 12:00',
+            '13:00:00' => '13:00 - 14:00',
+            '14:00:00' => '14:00 - 15:00',
+            '15:00:00' => '15:00 - 16:00'
+        ];
+        
         $organizedResults = [];
-        foreach ($results as $row) {
-            $slotTime = $row['slot_time'];
-            $dayName = $row['day_name'];
-            
-            if (!isset($organizedResults[$slotTime])) {
-                $organizedResults[$slotTime] = [
-                    'display' => $row['display_time'],
-                    'Monday' => ['status' => 'Unavailable', 'doctors' => ''],
-                    'Tuesday' => ['status' => 'Unavailable', 'doctors' => ''],
-                    'Wednesday' => ['status' => 'Unavailable', 'doctors' => ''],
-                    'Thursday' => ['status' => 'Unavailable', 'doctors' => ''],
-                    'Friday' => ['status' => 'Unavailable', 'doctors' => '']
-                ];
-            }
-            
-            $organizedResults[$slotTime][$dayName] = [
-                'status' => $row['status'],
-                'doctors' => $row['available_doctors'],
-                'count' => $row['doctor_count']
+        foreach ($timeSlots as $slotTime => $displayTime) {
+            $organizedResults[$slotTime] = [
+                'display' => $displayTime,
+                'Monday' => ['status' => 'Unavailable', 'doctors' => '', 'count' => 0],
+                'Tuesday' => ['status' => 'Unavailable', 'doctors' => '', 'count' => 0],
+                'Wednesday' => ['status' => 'Unavailable', 'doctors' => '', 'count' => 0],
+                'Thursday' => ['status' => 'Unavailable', 'doctors' => '', 'count' => 0],
+                'Friday' => ['status' => 'Unavailable', 'doctors' => '', 'count' => 0]
             ];
+        }
+        
+        // Process availability data
+        foreach ($availabilityData as $availability) {
+            $dayName = $availability['day_name'];
+            $startTime = $availability['start_time'];
+            $endTime = $availability['end_time'];
+            $doctorName = $availability['doctor_name'];
+            $availableDate = $availability['available_date'];
+            
+            // Check if the date is in the past
+            $isPastDate = strtotime($availableDate) < strtotime(date('Y-m-d'));
+            $doctorStatus = $isPastDate ? 'Completed' : 'Available';
+            
+            // Mark all time slots between start and end time as available
+            foreach ($timeSlots as $slotTime => $displayTime) {
+
+                if ($slotTime >= $startTime && $slotTime < $endTime) {
+                    // Add doctor to the available doctors list
+                    if (!empty($organizedResults[$slotTime][$dayName]['doctors'])) {
+                        $organizedResults[$slotTime][$dayName]['doctors'] .= ', ';
+                    }
+                    $organizedResults[$slotTime][$dayName]['doctors'] .= $doctorName . ' (' . $doctorStatus . ')';
+                    
+                    $organizedResults[$slotTime][$dayName]['count']++;
+                    
+                    if ($organizedResults[$slotTime][$dayName]['status'] == 'Unavailable' || 
+                        ($organizedResults[$slotTime][$dayName]['status'] == 'Completed' && $doctorStatus == 'Available')) {
+                        $organizedResults[$slotTime][$dayName]['status'] = $doctorStatus;
+                    }
+                }
+            }
         }
         
         return $organizedResults;

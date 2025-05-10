@@ -1,9 +1,7 @@
 <?php
 session_start();
-
 require_once '../Admin_Functions/MedDataService.php';
 
-// Get user_id from query parameter
 $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
 
 if ($userId > 0) {

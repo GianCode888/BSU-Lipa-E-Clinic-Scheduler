@@ -200,4 +200,5 @@ class AvailabilityService {
         return sprintf('%d-W%02d', $year, $week);
     }
 }
+
 ?>
