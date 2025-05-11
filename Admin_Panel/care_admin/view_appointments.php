@@ -16,14 +16,12 @@ $pendingToday = $medDataService->getPendingAppointmentsTodayCount();
 $approvedToday = $medDataService->getApprovedAppointmentsTodayCount();
 $declinedToday = $medDataService->getDeclinedAppointmentsTodayCount();
 
-// Get all patients with appointments for the dropdown
 $patients = $medDataService->getPatientsWithAppointments();
 
 // Process filter form submission
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 $status = isset($_GET['status']) ? $_GET['status'] : null;
 
-// Get filtered appointments
 $appointments = $medDataService->getFilteredAppointments($userId, $status);
 ?>
 

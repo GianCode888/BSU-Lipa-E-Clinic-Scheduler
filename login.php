@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = htmlspecialchars($_POST['email']);
         $password = htmlspecialchars($_POST['password']);
         
-        $adminService = new AdminService();
+        $adminService = new AdminService();    //instantiationnnnn
         $role = $adminService->getAdminRole($email, $password);
 
         if ($role !== null) {

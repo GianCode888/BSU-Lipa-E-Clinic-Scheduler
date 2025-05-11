@@ -18,10 +18,9 @@ if (isset($_SESSION['login_notification'])) {
     unset($_SESSION['login_notification']); 
 }
 
-$adminService = new SuperAdminService();
-$stats = $adminService->getDashboardStats();
+$adminService = new SuperAdminService();   //instantiate
+$stats = $adminService->getDashboardStats();   //call the methods
 
-$recentActivity = $adminService->getRecentActivity(5); 
 $recentAppointments = $adminService->getRecentAppointments(5);
 $recentMedicalRecords = $adminService->getRecentMedicalRecords(5);
 ?>

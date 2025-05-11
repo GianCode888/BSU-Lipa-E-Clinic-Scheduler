@@ -19,13 +19,6 @@ class SuperAdminService {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getRecentActivity($limit) {
-        $stmt = $this->conn->prepare("CALL GetRecentActivity(:limit)");
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function getRecentAppointments($limit) {
         $stmt = $this->conn->prepare("CALL GetRecentAppointments(:limit)");
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
