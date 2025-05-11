@@ -95,15 +95,14 @@ class SuperAdminService {
     }
 
     public function deleteUser($userId) {
-        $this->conn->query("SET @success = 0");
-        
-        $stmt = $this->conn->prepare("CALL DeleteUser(:id, @success)");
-        $stmt->bindParam(':id', $userId);
-        $stmt->execute();
-
-        $result = $this->conn->query("SELECT @success AS success");
-        return $result->fetch(PDO::FETCH_ASSOC)['success'];
-    }
+    $this->conn->query("SET @success = 0");
+    $stmt = $this->conn->prepare("CALL DeleteUser(:id, @success)");
+    $stmt->bindParam(':id', $userId);
+    $stmt->execute();
+    
+    $result = $this->conn->query("SELECT @success AS success");
+    return $result->fetch(PDO::FETCH_ASSOC)['success'];
+}
     
  
     
