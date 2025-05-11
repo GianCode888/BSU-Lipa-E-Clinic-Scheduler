@@ -48,51 +48,48 @@ class SuperAdminService {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($userId, $firstName, $lastName, $email, $userType, $address, $contactNumber) {
-        $originalUser = $this->getUserById($userId); 
-        $this->errorHandler->clearErrors();
-        
-        // Validate that the user exists
-        if (!$this->errorHandler->validateUserExists($originalUser)) {
-            return false;
-        }
+   public function updateUser($userId, $firstName, $lastName, $email, $userType) {
+    $originalUser = $this->getUserById($userId); 
+    $this->errorHandler->clearErrors();
 
-        // for validation
-        $newUserData = [
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'email' => $email,
-            'role' => $userType,
-            'address' => $address,
-            'contact_number' => $contactNumber
-        ];
-        
-        if (!$this->errorHandler->validateUserData($newUserData)) {
-            return false;
-        }
-        
-        if (!$this->errorHandler->validateChanges($originalUser, $newUserData)) {
-            return false;
-        }
-        
-        $this->conn->query("SET @success = 0");
-        
-        $stmt = $this->conn->prepare("CALL UpdateUser(:id, :fname, :lname, :email, :type, :address, :contact, @success)");
-        $stmt->bindParam(':id', $userId);
-        $stmt->bindParam(':fname', $firstName);
-        $stmt->bindParam(':lname', $lastName);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':type', $userType);
-        $stmt->bindParam(':address', $address);
-        $stmt->bindParam(':contact', $contactNumber);
-        $stmt->execute();
-        
-        // success status
-        $result = $this->conn->query("SELECT @success AS success");
-        $success = $result->fetch(PDO::FETCH_ASSOC)['success'];
-        
-        return $success;
+    // Validate that the user exists
+    if (!$this->errorHandler->validateUserExists($originalUser)) {
+        return false;
     }
+
+    // for validation
+    $newUserData = [
+        'first_name' => $firstName,
+        'last_name' => $lastName,
+        'email' => $email,
+        'role' => $userType
+    ];
+
+    if (!$this->errorHandler->validateUserData($newUserData)) {
+        return false;
+    }
+
+    if (!$this->errorHandler->validateChanges($originalUser, $newUserData)) {
+        return false;
+    }
+
+    $this->conn->query("SET @success = 0");
+
+    $stmt = $this->conn->prepare("CALL UpdateUser(:id, :fname, :lname, :email, :type, @success)");
+    $stmt->bindParam(':id', $userId);
+    $stmt->bindParam(':fname', $firstName);
+    $stmt->bindParam(':lname', $lastName);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':type', $userType);
+    $stmt->execute();
+
+    // success status
+    $result = $this->conn->query("SELECT @success AS success");
+    $success = $result->fetch(PDO::FETCH_ASSOC)['success'];
+
+    return $success;
+}
+
 
     public function deleteUser($userId) {
     $this->conn->query("SET @success = 0");

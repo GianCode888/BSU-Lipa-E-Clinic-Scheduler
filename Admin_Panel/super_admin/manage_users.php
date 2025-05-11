@@ -29,7 +29,6 @@ if (isset($_GET['error'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,8 +80,6 @@ if (isset($_GET['error'])) {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>Contact Number</th>
-                        <th>Address</th>
                         <th>Created At</th>
                         <th>Actions</th>
                     </tr>
@@ -94,8 +91,6 @@ if (isset($_GET['error'])) {
                         <td><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></td>
                         <td><?php echo htmlspecialchars($user['email']); ?></td>
                         <td><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
-                        <td><?php echo htmlspecialchars($user['contact_number'] ?? 'N/A'); ?></td>
-                        <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
                         <td><?php echo date('Y-m-d', strtotime($user['created_at'])); ?></td>
                         <td>
                             <button class="btn btn-sm btn-info view-user-btn"
@@ -120,8 +115,6 @@ if (isset($_GET['error'])) {
                                         <p><strong>Name:</strong> <?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></p>
                                         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
                                         <p><strong>Role:</strong> <?php echo ucfirst(htmlspecialchars($user['role'])); ?></p>
-                                        <p><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number'] ?? 'N/A'); ?></p>
-                                        <p><strong>Address:</strong> <?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></p>
                                         <p><strong>Created At:</strong> <?php echo date('Y-m-d', strtotime($user['created_at'])); ?></p>
                                     </div>
                                 </div>

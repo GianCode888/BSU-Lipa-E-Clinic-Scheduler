@@ -33,11 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lastName = trim($_POST['last_name']);
     $email = trim($_POST['email']);
     $role = $_POST['role'];
-    $address = trim($_POST['address']);
-    $contactNumber = trim($_POST['contact_number']);
-    
-    $success = $adminService->updateUser($userId, $firstName, $lastName, $email, $role, $address, $contactNumber);
-    
+
+    // Removed contact number
+    $success = $adminService->updateUser($userId, $firstName, $lastName, $email, $role);
+
     if ($success) {
         header("Location: manage_users.php?success=update");
         exit();
@@ -127,27 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
                     </div>
                 </div>
-                
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control <?php echo isset($validationErrors['address']) ? 'is-invalid' : ''; ?>" 
-                              id="address" name="address" rows="2"><?php echo htmlspecialchars($_POST['address'] ?? $user['address'] ?? ''); ?></textarea>
-                    <?php if (isset($validationErrors['address'])): ?>
-                        <div class="invalid-feedback"><?php echo htmlspecialchars($validationErrors['address']); ?></div>
-                    <?php endif; ?>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="contact_number" class="form-label">Contact Number</label>
-                    <input type="text" class="form-control <?php echo isset($validationErrors['contact_number']) ? 'is-invalid' : ''; ?>" 
-                           id="contact_number" name="contact_number" 
-                           value="<?php echo htmlspecialchars($_POST['contact_number'] ?? $user['contact_number'] ?? ''); ?>">
-                    <small class="text-muted">Must be 11 digits</small>
-                    <?php if (isset($validationErrors['contact_number'])): ?>
-                        <div class="invalid-feedback"><?php echo htmlspecialchars($validationErrors['contact_number']); ?></div>
-                    <?php endif; ?>
-                </div>
-                
+
+                <!-- Contact number removed -->
+
                 <div class="d-flex justify-content-between">
                     <a href="manage_users.php" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -160,3 +141,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
