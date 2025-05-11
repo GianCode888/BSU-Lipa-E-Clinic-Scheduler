@@ -4,7 +4,6 @@ require_once 'doctor_crud.php';
 
 // Ensure the user is logged in as a doctor
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'doctor') {
-    // If not logged in, redirect to login page
     header("Location: login.php");
     exit();
 }
