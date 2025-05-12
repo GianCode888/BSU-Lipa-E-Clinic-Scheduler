@@ -1,0 +1,114 @@
+/* Reset & Base */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #4a0000;
+    position: relative;
+}
+
+/* Overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.85); /* White overlay to ensure readability */
+    z-index: -1;
+}
+
+/* Container for the form and button */
+.container {
+    max-width: 500px;
+    margin: 60px auto 40px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+/* Home Button */
+button[type="button"] {
+    background-color: #d32f2f;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+button[type="button"]:hover {
+    background-color: #b71c1c;
+}
+
+/* Form Container */
+form {
+    background: #ffffff;
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+    border-left: 10px solid #d32f2f;
+    transition: transform 0.3s ease;
+}
+
+form:hover {
+    transform: scale(1.01);
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #b71c1c;
+    font-size: 0.95rem;
+}
+
+/* Input Fields */
+input[type="date"],
+input[type="time"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #f8d7da;
+    border-radius: 10px;
+    background-color: #fffafa;
+    color: #4a0000;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    transition: border 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #d32f2f;
+    outline: none;
+}
+
+/* Submit Button */
+form button[type="submit"] {
+    margin-top: 25px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+    background-color: #b71c1c;
+}

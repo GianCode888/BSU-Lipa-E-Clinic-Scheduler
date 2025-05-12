@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Availability</title>
+    <link rel="stylesheet" href="../CSS/view_availibility.css">
+</head>
+
+<body>
+    <button type="button" onclick="window.location.href='../student_dashboard.php'">Home</button>
+
+    <form method="GET" action="view_availability.php">
+        <label for="available_date">Select a day:</label>
+        <select name="available_date" id="available_date" required>
+            <option value="">~Choose~</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+        </select>
+        <button type="submit">View</button>
+    </form>
+</body>
+
+</html>

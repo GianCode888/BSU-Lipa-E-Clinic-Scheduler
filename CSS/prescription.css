@@ -1,0 +1,112 @@
+/* Overall page styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+/* Main container */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.85); /* Slightly transparent white */
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Button to go back */
+button {
+    padding: 12px 18px;
+    background-color: #c1121f; /* Darker red */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 20px 0;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #900c1d; /* Darker red on hover */
+}
+
+/* Title */
+h2 {
+    text-align: center;
+    color: #c1121f; /* Red */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+
+th {
+    background-color: #c1121f; /* Red for header */
+    color: white;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* "Give Prescription" button style */
+form button {
+    padding: 10px 20px;
+    background-color: #dc3545; /* Red button */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #bd2130; /* Darker red on hover */
+}
+
+/* No data message */
+p {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #c1121f; /* Red color for no data message */
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}

@@ -1,0 +1,121 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('https://batstateu.edu.ph/wp-content/uploads/2020/10/lipa-slider-1-scaled.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Style */
+h3 {
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+    font-size: 2rem;
+}
+
+/* Button Style */
+button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+    margin: 10px 0;
+}
+
+button:hover {
+    background-color: #cc0000;
+}
+
+/* Home Button at the top */
+button[type="button"] {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1rem;
+    padding: 10px;
+}
+
+/* Table Styles */
+table {
+    width: 80%;
+    margin: 50px auto;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #ff4d4d;
+    color: white;
+    font-size: 1.1rem;
+}
+
+table td {
+    background-color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Form Styles */
+form {
+    display: inline-block;
+}
+
+input[type="hidden"] {
+    display: none;
+}
+
+/* Delete Button Style inside Table */
+button[name="delete"] {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button[name="delete"]:hover {
+    background-color: #cc0000;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    table {
+        width: 90%;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    table th, table td {
+        font-size: 0.9rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+    }
+}
